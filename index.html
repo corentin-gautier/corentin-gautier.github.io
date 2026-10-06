@@ -1,10 +1,12 @@
 <!doctype html>
 <html lang="fr">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Corentin Gautier — Web designer et développeur front-end à Bordeaux</title>
-  <meta name="description" content="Portfolio de Corentin Gautier, web designer et développeur front-end à Bordeaux, engagé dans l'éco-conception web : parcours, réalisations et projets open source.">
+  <meta name="description"
+    content="Portfolio de Corentin Gautier, web designer et développeur front-end à Bordeaux, engagé dans l'éco-conception web : parcours, réalisations et projets open source.">
   <meta name="author" content="Corentin Gautier">
   <link rel="canonical" href="https://corentin-gautier.github.io/">
   <meta name="geo.region" content="FR-NAQ">
@@ -17,7 +19,8 @@
   <meta property="og:locale" content="fr_FR">
   <meta property="og:site_name" content="Corentin Gautier">
   <meta property="og:title" content="Corentin Gautier — Web designer et développeur front-end à Bordeaux">
-  <meta property="og:description" content="Web designer et développeur front-end à Bordeaux depuis 2012, engagé dans l'éco-conception web. Parcours, réalisations et projets open source.">
+  <meta property="og:description"
+    content="Web designer et développeur front-end à Bordeaux depuis 2012, engagé dans l'éco-conception web. Parcours, réalisations et projets open source.">
   <meta property="og:url" content="https://corentin-gautier.github.io/">
   <meta property="og:image" content="https://corentin-gautier.github.io/assets/img/og-image.jpg">
   <meta property="og:image:width" content="1200">
@@ -91,6 +94,7 @@
   }
   </script>
 </head>
+
 <body>
   <a class="skip-link" href="#contenu">Aller au contenu</a>
 
@@ -119,12 +123,11 @@
       <div class="container hero__inner">
         <div class="hero__text">
           <h1>
-            <span class="eyebrow">Corentin Gautier, Bordeaux</span>
             Web designer &amp; développeur front-end, pour un web plus&nbsp;<em>léger</em>.
           </h1>
           <p class="lead">
-            Je dessine les sites que je développe, et je développe ceux que je dessine.
-            Depuis 2012, avec une priorité : des pages éco-conçues, rapides et accessibles.
+            Au moins on évite les problèmes de communication entre le développeur et le designer, enfin si j'ai bien
+            dormi ...
           </p>
           <p class="actions">
             <a class="button" href="#parcours">Voir mon parcours</a>
@@ -132,16 +135,21 @@
           </p>
         </div>
 
-        <aside class="label" aria-label="En bref">
-          <p class="label__top">Mis en ligne à Bordeaux</p>
-          <p class="label__name">Corentin<br>Gautier</p>
-          <p class="label__role">Design &amp; développement web</p>
-          <dl class="label__facts">
-            <div><dt>Depuis</dt><dd>2012</dd></div>
-            <div><dt>Engagement</dt><dd>Éco-conception</dd></div>
-            <div><dt>Cette page</dt><dd data-page-weight>&lt; 300&nbsp;ko</dd></div>
-          </dl>
-        </aside>
+        <dl class="hero__facts">
+          <div>
+            <dt>Depuis</dt>
+            <dd>2012</dd>
+          </div>
+          <div>
+            <dt>Engagement</dt>
+            <dd>Éco-conception</dd>
+          </div>
+          <div>
+            <dt>Poids actuel de cette page</dt>
+            <dd data-page-weight>&lt; 300&nbsp;ko</dd>
+          </div>
+        </dl>
+
       </div>
     </section>
 
@@ -196,17 +204,30 @@
 
             <div class="gauge">
               <span>Cette page</span>
-              <span class="gauge__bar gauge__bar--page" data-page-bar style="width: 12%"></span>
-              <span>Page web médiane : environ 2,5&nbsp;Mo
-                (<a href="https://httparchive.org/reports/page-weight" rel="noopener">HTTP Archive</a>)</span>
-              <span class="gauge__bar gauge__bar--median"></span>
+              <span class="gauge__track">
+                <span class="gauge__bar" data-page-bar style="width: 12%"></span>
+              </span>
+              <span class="gauge__median">Page web médiane : <a href="https://httparchive.org/reports/page-weight"
+                  rel="noopener" target="_blank">environ 2,5&nbsp;Mo</a></span>
             </div>
 
             <dl class="audit__facts">
-              <div><dt>Requêtes</dt><dd data-page-requests>moins de 20</dd></div>
-              <div><dt>Framework JavaScript</dt><dd>aucun</dd></div>
-              <div><dt>Polices téléchargées</dt><dd>0</dd></div>
-              <div><dt>Cookies et traceurs</dt><dd>0</dd></div>
+              <div>
+                <dt>Requêtes</dt>
+                <dd data-page-requests>moins de 20</dd>
+              </div>
+              <div>
+                <dt>Framework JavaScript</dt>
+                <dd>aucun</dd>
+              </div>
+              <div>
+                <dt>Polices téléchargées</dt>
+                <dd>0</dd>
+              </div>
+              <div>
+                <dt>Cookies et traceurs</dt>
+                <dd>0</dd>
+              </div>
             </dl>
             <p class="audit__note" data-page-note hidden>
               Mesuré en direct dans votre navigateur. Le chiffre monte pendant le défilement :
@@ -245,7 +266,7 @@
           <li>
             <h3>Développement front-end</h3>
             <p>
-              HTML, CSS et JavaScript écrits à la main, React pour les interfaces applicatives.
+              HTML, CSS et JavaScript Vanilla. Angular et React.
               Du code lisible, que d'autres pourront reprendre.
             </p>
           </li>
@@ -265,86 +286,80 @@
         <header class="section__head">
           <h2>Web design : quelques réalisations</h2>
           <p>
-            Identités, sites et interfaces dessinés ces dernières années.
-            Le reste est sur <a href="https://dribbble.com/Median" rel="me noopener">mon profil Dribbble</a>.
+            Identités, sites et interfaces réalisés ces dernières années.
+            Le reste est sur <a href="https://dribbble.com/Median" rel="me noopener" target="_blank">mon profil
+              Dribbble</a>.
           </p>
         </header>
       </div>
 
       <div class="container container--wide">
-        <snap-carousel
-          class="shots"
-          displayed="1.15"
-          gap="20"
-          controls
-          nav
-          prev-label="Précédent"
-          next-label="Suivant"
+        <snap-carousel class="shots" displayed="1.15" gap="20" controls nav prev-label="Précédent" next-label="Suivant"
           responsive='[{"breakpoint":700,"settings":{"displayed":2.2}},{"breakpoint":1100,"settings":{"displayed":3.2}}]'>
           <ul slot="scroller">
             <li class="shot">
               <picture>
                 <source srcset="/assets/img/easynode-landing.avif" type="image/avif">
-                <img src="/assets/img/easynode-landing.jpg" width="960" height="640" alt="Landing page EasyNode : fond violet, grand titre « Node running made easy » et mascotte ours polaire.">
+                <img src="/assets/img/easynode-landing.jpg" width="960" height="640"
+                  alt="Landing page EasyNode : fond violet, grand titre « Node running made easy » et mascotte ours polaire.">
               </picture>
-              <h3><a href="https://dribbble.com/shots/27145069-Easynode-Landing" rel="noopener">EasyNode, landing page</a></h3>
+              <h3><a href="https://dribbble.com/shots/27145069-Easynode-Landing" rel="noopener"
+                  target="_blank">EasyNode, landing
+                  page</a></h3>
               <p>Identité de marque, mascotte et web design</p>
             </li>
             <li class="shot">
               <picture>
                 <source srcset="/assets/img/easynode-marketplace.avif" type="image/avif">
-                <img src="/assets/img/easynode-marketplace.jpg" width="960" height="640" loading="lazy" alt="Marketplace EasyNode : grille de cartes de nœuds blockchain sur fond jaune.">
+                <img src="/assets/img/easynode-marketplace.jpg" width="960" height="640" loading="lazy"
+                  alt="Marketplace EasyNode : grille de cartes de nœuds blockchain sur fond jaune.">
               </picture>
-              <h3><a href="https://dribbble.com/shots/27145049-Easynode-Marketplace" rel="noopener">EasyNode, marketplace</a></h3>
+              <h3><a href="https://dribbble.com/shots/27145049-Easynode-Marketplace" rel="noopener"
+                  target="_blank">EasyNode,
+                  marketplace</a></h3>
               <p>Design system et interface d'application</p>
             </li>
             <li class="shot">
               <picture>
                 <source srcset="/assets/img/jack-in-the-box.avif" type="image/avif">
-                <img src="/assets/img/jack-in-the-box.jpg" width="960" height="640" loading="lazy" alt="Page d'accueil du site Jack In The Box : titre « Proposal Management » et illustration isométrique.">
+                <img src="/assets/img/jack-in-the-box.jpg" width="960" height="640" loading="lazy"
+                  alt="Page d'accueil du site Jack In The Box : titre « Proposal Management » et illustration isométrique.">
               </picture>
-              <h3><a href="https://dribbble.com/shots/24289943-Web-design-for-Jack-In-The-Box" rel="noopener">Jack In The Box</a></h3>
+              <h3><a href="https://dribbble.com/shots/24289943-Web-design-for-Jack-In-The-Box" rel="noopener"
+                  target="_blank">Jack In
+                  The Box</a></h3>
               <p>Web design</p>
             </li>
             <li class="shot">
               <picture>
                 <source srcset="/assets/img/nouvelles-renaissances.avif" type="image/avif">
-                <img src="/assets/img/nouvelles-renaissances.jpg" width="960" height="640" loading="lazy" alt="Maquette du site Nouvelles Renaissances.">
+                <img src="/assets/img/nouvelles-renaissances.jpg" width="960" height="640" loading="lazy"
+                  alt="Maquette du site Nouvelles Renaissances.">
               </picture>
-              <h3><a href="https://dribbble.com/shots/24289872-Web-Design-for-Nouvelles-Renaissances" rel="noopener">Nouvelles Renaissances</a></h3>
+              <h3><a href="https://dribbble.com/shots/24289872-Web-Design-for-Nouvelles-Renaissances" rel="noopener"
+                  target="_blank">Nouvelles Renaissances</a></h3>
               <p>Web design</p>
             </li>
             <li class="shot">
               <picture>
                 <source srcset="/assets/img/project-management-ui.avif" type="image/avif">
-                <img src="/assets/img/project-management-ui.jpg" width="960" height="640" loading="lazy" alt="Interface de suivi de dossiers : fil d'étapes, fiche des tiers et synthèse financière.">
+                <img src="/assets/img/project-management-ui.jpg" width="960" height="640" loading="lazy"
+                  alt="Interface de suivi de dossiers : fil d'étapes, fiche des tiers et synthèse financière.">
               </picture>
-              <h3><a href="https://dribbble.com/shots/24287730-Project-Management-UI" rel="noopener">Gestion de projets</a></h3>
+              <h3><a href="https://dribbble.com/shots/24287730-Project-Management-UI" rel="noopener"
+                  target="_blank">Gestion de
+                  projets</a></h3>
               <p>UI design d'application métier</p>
             </li>
             <li class="shot">
               <picture>
                 <source srcset="/assets/img/stream-overlay.avif" type="image/avif">
-                <img src="/assets/img/stream-overlay.jpg" width="960" height="640" loading="lazy" alt="Habillage de live : écran « Le live va bientôt commencer » sur fond turquoise avec un buste antique.">
+                <img src="/assets/img/stream-overlay.jpg" width="960" height="640" loading="lazy"
+                  alt="Habillage de live : écran « Le live va bientôt commencer » sur fond turquoise avec un buste antique.">
               </picture>
-              <h3><a href="https://dribbble.com/shots/14966251-Stream-Overlay" rel="noopener">Stream overlay</a></h3>
+              <h3><a href="https://dribbble.com/shots/14966251-Stream-Overlay" rel="noopener" target="_blank">Stream
+                  overlay</a></h3>
               <p>Habillage de live et identité personnelle</p>
-            </li>
-            <li class="shot">
-              <picture>
-                <source srcset="/assets/img/illustration-paysage.avif" type="image/avif">
-                <img src="/assets/img/illustration-paysage.jpg" width="960" height="640" loading="lazy" alt="Illustration : forêt de sapins en silhouette devant des montagnes roses au coucher du soleil.">
-              </picture>
-              <h3><a href="https://dribbble.com/shots/9912998-Very-Formulaic-Multi-Layered-Landscape-Illustration-VFMLLI" rel="noopener">Paysage en couches</a></h3>
-              <p>Illustration, peinture numérique</p>
-            </li>
-            <li class="shot">
-              <picture>
-                <source srcset="/assets/img/arrows-3d.avif" type="image/avif">
-                <img src="/assets/img/arrows-3d.jpg" width="960" height="640" loading="lazy" alt="Rendu 3D abstrait : flèches métalliques au-dessus d'une plaque chromée sur fond bleu.">
-              </picture>
-              <h3><a href="https://dribbble.com/shots/6615213-Arrows" rel="noopener">Arrows</a></h3>
-              <p>3D, Cinema 4D</p>
             </li>
           </ul>
         </snap-carousel>
@@ -376,11 +391,22 @@
               pas de jQuery, et un fichier n'est chargé que sur les pages qui en ont besoin.
             </p>
             <ul class="tags" aria-label="Technologies">
-              <li>WordPress</li><li>Timber / Twig</li><li>ACF</li><li>Docker</li><li>Gulp</li><li>WooCommerce</li>
+              <li>WordPress</li>
+              <li>Timber / Twig</li>
+              <li>ACF</li>
+              <li>Docker</li>
+              <li>Gulp</li>
+              <li>WooCommerce</li>
             </ul>
             <dl class="project__facts">
-              <div><dt>En service depuis</dt><dd>2019</dd></div>
-              <div><dt>Commits</dt><dd>1 300+</dd></div>
+              <div>
+                <dt>En service depuis</dt>
+                <dd>2019</dd>
+              </div>
+              <div>
+                <dt>Commits</dt>
+                <dd>1 300+</dd>
+              </div>
             </dl>
           </article>
 
@@ -392,7 +418,9 @@
               (CSS scroll snap). Il se configure en HTML et ne télécharge que les fonctions utilisées.
             </p>
             <ul class="tags" aria-label="Technologies">
-              <li>JavaScript</li><li>Custom Elements</li><li>CSS</li>
+              <li>JavaScript</li>
+              <li>Custom Elements</li>
+              <li>CSS</li>
             </ul>
             <p class="project__links">
               <a href="https://github.com/corentin-gautier/snap-carousel" rel="me noopener">Code source</a>
@@ -408,7 +436,9 @@
               Gutenberg : niveaux de titres, chargement différé, vidéos YouTube chargées au clic.
             </p>
             <ul class="tags" aria-label="Technologies">
-              <li>Gutenberg</li><li>PHP</li><li>React</li>
+              <li>Gutenberg</li>
+              <li>PHP</li>
+              <li>React</li>
             </ul>
             <p class="project__links">
               <a href="https://github.com/corentin-gautier/core-blocks-enhancer" rel="me noopener">Code source</a>
@@ -423,22 +453,21 @@
         <div class="about__intro">
           <picture>
             <source srcset="/assets/img/corentin-gautier.avif" type="image/avif">
-            <img class="portrait" src="/assets/img/corentin-gautier.jpg" width="320" height="320" loading="lazy" alt="Portrait de Corentin Gautier">
+            <img class="portrait" src="/assets/img/corentin-gautier.jpg" width="320" height="320" loading="lazy"
+              alt="Portrait de Corentin Gautier">
           </picture>
           <h2>Quatorze ans entre la maquette et le code</h2>
           <p>
-            Je m'appelle Corentin Gautier et je vis à Bordeaux. Depuis 2012, je travaille à la fois
-            comme web designer et comme développeur front-end, ce qui évite les maquettes
-            impossibles à développer et les sites qui ne ressemblent plus à leur maquette.
-          </p>
-          <p>
-            En dehors du web, je compose et je mixe de la musique.
+            Depuis 2012, je travaille à la fois
+            comme web designer et comme développeur front-end et Wordpress, avec un intérêt particulier pour
+            l'éco-conception et l'accessibilité.
           </p>
         </div>
 
         <ol class="timeline">
           <li>
-            <p class="timeline__dates"><time datetime="2024-11">Nov. 2024</time> – <time datetime="2026-02">févr. 2026</time></p>
+            <p class="timeline__dates"><time datetime="2024-11">Nov. 2024</time> – <time datetime="2026-02">févr.
+                2026</time></p>
             <h3>UI designer &amp; développeur front-end <span>EasyNode</span></h3>
             <p>
               Refonte de l'image de marque, logo et charte graphique. Web design et design system
@@ -446,7 +475,8 @@
             </p>
           </li>
           <li>
-            <p class="timeline__dates"><time datetime="2015-07">Juil. 2015</time> – <time datetime="2024-09">sept. 2024</time></p>
+            <p class="timeline__dates"><time datetime="2015-07">Juil. 2015</time> – <time datetime="2024-09">sept.
+                2024</time></p>
             <h3>Développeur front-end, UI designer &amp; expert technique <span>Conserto</span></h3>
             <p>
               Développement WordPress, front-end, React et mobile hybride. Web design,
@@ -454,7 +484,8 @@
             </p>
           </li>
           <li>
-            <p class="timeline__dates"><time datetime="2012-06">Juin 2012</time> – <time datetime="2015-07">juil. 2015</time></p>
+            <p class="timeline__dates"><time datetime="2012-06">Juin 2012</time> – <time datetime="2015-07">juil.
+                2015</time></p>
             <h3>Développeur front-end <span>Raccourci</span></h3>
             <p>
               Intégration HTML, CSS et JavaScript, développement AngularJS,
@@ -477,7 +508,8 @@
           Le plus simple est de m'écrire sur LinkedIn.
         </p>
         <p class="actions">
-          <a class="button button--light" href="https://www.linkedin.com/in/corentin-gautier-513b928a" rel="me noopener">Me contacter sur LinkedIn</a>
+          <a class="button button--light" href="https://www.linkedin.com/in/corentin-gautier-513b928a"
+            rel="me noopener">Me contacter sur LinkedIn</a>
         </p>
         <ul class="contact__links">
           <li><a href="https://github.com/corentin-gautier" rel="me noopener">GitHub</a></li>
@@ -520,4 +552,5 @@
     addEventListener('load', measure);
   </script>
 </body>
+
 </html>
