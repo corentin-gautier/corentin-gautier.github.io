@@ -107,9 +107,16 @@
         <span class="wordmark__mark" aria-hidden="true">CG</span>
         <span>Corentin Gautier</span>
       </a>
-      <p class="meter">
-        <span class="visually-hidden">Poids chargé par cette page :</span>
-        <span data-page-weight>&lt; 300&nbsp;ko</span>
+      <p class="meter" data-page-meter>
+        <button class="meter__button" type="button" aria-describedby="meter-tip">
+          <span class="visually-hidden">Poids chargé par cette page :</span>
+          <span data-page-weight>&lt; 300&nbsp;ko</span>
+        </button>
+        <span class="meter__tip" id="meter-tip" role="tooltip">
+          <strong data-page-delta hidden></strong>
+          Poids téléchargé par cette page jusqu'ici. Il monte pendant le défilement&nbsp;:
+          chaque image n'est chargée qu'à l'approche de l'écran.
+        </span>
       </p>
       <nav aria-label="Navigation principale">
         <ul class="nav">
@@ -542,6 +549,27 @@
     const set = (name, value) =>
       document.querySelectorAll(`[data-page-${name}]`).forEach((el) => { el.textContent = value; });
 
+    // Infobulle du compteur : affichée quelques secondes quand le poids monte après le chargement
+    const meter = document.querySelector('[data-page-meter]');
+    const delta = document.querySelector('[data-page-delta]');
+    let lastBytes = 0;
+    let settled = false;
+    let gained = 0;
+    let hideTimer;
+
+    const flash = (bytes) => {
+      gained += bytes;
+      delta.textContent = `+${Math.max(1, Math.round(gained / 1000))}\u00a0ko à l'instant.`;
+      delta.hidden = false;
+      meter.classList.add('is-fresh');
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => {
+        meter.classList.remove('is-fresh');
+        delta.hidden = true;
+        gained = 0;
+      }, 3500);
+    };
+
     const measure = () => {
       const entries = [
         ...performance.getEntriesByType('navigation'),
@@ -549,6 +577,8 @@
       ];
       const bytes = entries.reduce((sum, entry) => sum + entry.encodedBodySize, 0);
       if (!bytes) return;
+      if (settled && bytes > lastBytes) flash(bytes - lastBytes);
+      lastBytes = bytes;
 
       set('weight', `${Math.round(bytes / 1000)}\u00a0ko`);
       set('requests', entries.length);
@@ -557,7 +587,13 @@
     };
 
     new PerformanceObserver(measure).observe({ type: 'resource', buffered: true });
-    addEventListener('load', measure);
+    addEventListener('load', () => {
+      measure();
+      setTimeout(() => { settled = true; }, 1500);
+    });
+    meter.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') event.target.blur();
+    });
   </script>
 </body>
 

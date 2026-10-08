@@ -11,6 +11,7 @@
   --marker-ink: currentColor;
   --focus: #111210;
   --screen: #111210;
+  --accent-on-ink: #c8f031;
 
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
@@ -33,6 +34,7 @@
     --marker-ink: var(--accent);
     --focus: #eeefe6;
     --screen: #191b15;
+    --accent-on-ink: #3f6212;
   }
 }
 
@@ -208,12 +210,57 @@ a:hover {
 
 /* Live page weight, follows the scroll */
 .meter {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   margin-left: auto;
   font-family: var(--mono);
   font-size: 0.8rem;
+}
+
+.meter__button {
+  padding: 0.35rem 0.25rem;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: help;
+}
+
+/* Shown on hover and focus, and for a few seconds when the weight goes up */
+.meter__tip {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  right: 0;
+  z-index: 6;
+  width: min(17rem, 80vw);
+  padding: 0.75rem 0.9rem;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  line-height: 1.45;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease, visibility 0.2s;
+}
+
+.meter:hover .meter__tip,
+.meter:focus-within .meter__tip,
+.meter.is-fresh .meter__tip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.meter__tip strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-family: var(--mono);
+}
+
+.meter.is-fresh .meter__tip strong {
+  color: var(--accent-on-ink);
 }
 
 .meter::before {
@@ -954,7 +1001,8 @@ main {
     scroll-behavior: auto;
   }
 
-  .gauge__bar {
+  .gauge__bar,
+  .meter__tip {
     transition: none;
   }
 }
