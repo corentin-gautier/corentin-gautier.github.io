@@ -13,6 +13,7 @@
   --screen: #111210;
 
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
   --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 
   --gutter: clamp(1.25rem, 4vw, 2.5rem);
@@ -282,6 +283,20 @@ a:hover {
 
 .hero {
   padding-block: clamp(3rem, 9vw, 7.5rem) clamp(3rem, 6vw, 5rem);
+}
+
+/* In the headline only: the serif draws, the mono codes */
+.voice-design {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.voice-code {
+  font-family: var(--mono);
+  font-weight: 500;
+  letter-spacing: -0.07em;
 }
 
 h1 em {
