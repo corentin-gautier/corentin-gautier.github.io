@@ -12,9 +12,7 @@
   --focus: #111210;
   --screen: #111210;
 
-  /* Two voices: the serif draws, the mono codes */
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
   --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 
   --gutter: clamp(1.25rem, 4vw, 2.5rem);
@@ -161,21 +159,6 @@ a:hover {
 
 .container--wide {
   max-width: 88rem;
-}
-
-/* The two voices */
-
-.voice-design {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: -0.02em;
-}
-
-.voice-code {
-  font-family: var(--mono);
-  font-weight: 500;
-  letter-spacing: -0.07em;
 }
 
 /* Header */
@@ -434,15 +417,7 @@ main {
   font-size: 1.125rem;
 }
 
-/* Design speaks in serif */
-.section--design h2 {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: -0.025em;
-}
-
-/* Code speaks in mono, on a dark screen in both themes */
+/* The code section sits on a dark screen in both themes */
 .section--code {
   --paper: #0b0c09;
   --card: #171914;
@@ -454,14 +429,6 @@ main {
 
   background: var(--paper);
   color: var(--ink);
-}
-
-.section--code h2 {
-  font-family: var(--mono);
-  font-size: clamp(1.7rem, 3.9vw, 2.9rem);
-  font-weight: 500;
-  line-height: 1.08;
-  letter-spacing: -0.07em;
 }
 
 /* Eco-design */
@@ -649,10 +616,6 @@ main {
 
 .shot h3 {
   margin-top: 0.9rem;
-  font-family: var(--serif);
-  font-size: 1.3rem;
-  font-style: italic;
-  font-weight: 400;
 }
 
 .shot h3 a {
@@ -667,8 +630,7 @@ main {
 
 .shot p {
   color: var(--muted);
-  font-family: var(--mono);
-  font-size: 0.75rem;
+  font-size: 0.92rem;
 }
 
 /* Carousel controls, JavaScript version */
@@ -796,16 +758,15 @@ main {
 }
 
 .project h3 {
-  font-family: var(--mono);
-  font-size: 1.5rem;
-  font-weight: 500;
+  font-size: 1.6rem;
+  font-weight: 700;
   line-height: 1.1;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.03em;
 }
 
 .project--feature h3 {
   font-size: clamp(2.5rem, 5vw, 3.75rem);
-  letter-spacing: -0.08em;
+  letter-spacing: -0.04em;
 }
 
 .project p {
@@ -831,8 +792,7 @@ main {
   gap: 0.25rem 1.5rem;
   margin-top: auto;
   padding-top: 0.5rem;
-  font-family: var(--mono);
-  font-size: 0.85rem;
+  font-weight: 600;
 }
 
 .project__facts {
@@ -895,9 +855,7 @@ main {
 
 .timeline h3 span {
   display: block;
-  font-family: var(--serif);
-  font-size: 1.2rem;
-  font-style: italic;
+  color: var(--muted);
   font-weight: 400;
 }
 
