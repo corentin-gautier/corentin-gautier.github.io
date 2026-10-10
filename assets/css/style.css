@@ -794,7 +794,7 @@ main {
   }
 
   .project--feature {
-    grid-row: span 3;
+    grid-row: span 2;
   }
 }
 
@@ -878,6 +878,41 @@ main {
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: -0.04em;
+}
+
+/* Side project: set apart from the web development work above */
+
+.side-project {
+  display: grid;
+  gap: 1rem 2.5rem;
+  align-items: start;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  padding-top: 1.5rem;
+  border-top: var(--rule) solid var(--line);
+}
+
+@media (min-width: 56rem) {
+  .side-project {
+    grid-template-columns: 1fr 1.6fr auto;
+  }
+}
+
+.side-project h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.side-project p:not(.eyebrow, .project__links) {
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+.side-project .project__links {
+  margin-top: 0;
+  padding-top: 0;
+  color: var(--ink);
 }
 
 /* About and timeline */
