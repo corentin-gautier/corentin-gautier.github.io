@@ -470,6 +470,32 @@ main {
   margin-bottom: clamp(2.5rem, 5vw, 4rem);
 }
 
+/* The leaf of the logo, at the same weight, beside the eco-design title */
+.section__leaf {
+  display: block;
+  width: 4.5rem;
+  height: 4.5rem;
+  margin-bottom: 2rem;
+  color: var(--accent-text);
+}
+
+@media (min-width: 60rem) {
+  .section__head--leaf {
+    position: relative;
+    max-width: none;
+    padding-right: clamp(12rem, 24vw, 19rem);
+  }
+
+  .section__leaf {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: clamp(9rem, 17vw, 14rem);
+    height: auto;
+    margin: 0;
+  }
+}
+
 .section__head p:not(.eyebrow),
 .about__intro p {
   max-width: 42rem;
@@ -917,16 +943,42 @@ main {
 /* About and timeline */
 
 .about__intro {
-  max-width: 50rem;
   margin-bottom: clamp(2.5rem, 5vw, 4rem);
 }
 
+.about__intro h2 {
+  max-width: 50rem;
+}
+
 .portrait {
-  width: 6rem;
-  height: 6rem;
+  display: block;
+  width: 10rem;
   margin-bottom: 2rem;
   border: var(--rule) solid var(--ink);
+  max-width: 200px;
+}
+
+.portrait img {
+  width: 100%;
+  aspect-ratio: 1;
   object-fit: cover;
+}
+
+/* From here the portrait sits to the right of the title */
+@media (min-width: 48rem) {
+  .about__intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+
+  .portrait {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    width: clamp(12rem, 24vw, 20rem);
+    margin-bottom: 0;
+  }
 }
 
 .timeline li {
