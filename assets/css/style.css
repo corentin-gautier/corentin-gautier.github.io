@@ -1047,6 +1047,27 @@ main {
   color: var(--on-accent);
 }
 
+.contact .button--ghost {
+  background: none;
+  color: var(--on-accent);
+}
+
+.contact .button--ghost:hover {
+  background: var(--on-accent);
+  color: var(--accent);
+}
+
+.button--kofi {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.button--kofi svg {
+  flex: none;
+  margin-block: -0.2rem;
+}
+
 .contact a:not(.button):hover {
   background: var(--on-accent);
   color: var(--accent);
