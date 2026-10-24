@@ -905,20 +905,34 @@ main {
   letter-spacing: -0.04em;
 }
 
-/* Side project: set apart from the web development work above */
+/* Side projects: set apart from the web development work above */
 
-.side-project {
-  display: grid;
-  gap: 1rem 2.5rem;
-  align-items: start;
+.side-projects {
   margin-top: clamp(2.5rem, 5vw, 4rem);
   padding-top: 1.5rem;
   border-top: var(--rule) solid var(--line);
 }
 
+.side-projects ul {
+  display: grid;
+  gap: 2rem;
+}
+
+.side-project {
+  display: grid;
+  gap: 1rem 2.5rem;
+  align-items: start;
+}
+
+/* One grid for every side project, so their columns line up */
 @media (min-width: 56rem) {
-  .side-project {
+  .side-projects ul {
     grid-template-columns: 1fr 1.6fr auto;
+  }
+
+  .side-project {
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
   }
 }
 
