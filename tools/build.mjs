@@ -7,7 +7,7 @@ import { minify } from 'html-minifier-terser';
 export const ROOT = fileURLToPath(new URL('..', import.meta.url));
 export const DIST = `${ROOT}dist/`;
 
-const COPIED = ['assets', 'favicon.svg', 'robots.txt', 'sitemap.xml', '.nojekyll'];
+const COPIED = ['assets', 'favicon.svg', 'robots.txt', 'sitemap.xml', 'sitemap-main.xml', '.nojekyll'];
 const PAGES = ['index.html', '404.html'];
 const STYLES = ['assets/css/style.css'];
 

@@ -2,7 +2,3 @@ User-agent: *
 Allow: /
 
 Sitemap: https://corentin-gautier.github.io/sitemap.xml
-Sitemap: https://corentin-gautier.github.io/cassonade/sitemap.xml
-Sitemap: https://corentin-gautier.github.io/snap-carousel/sitemap.xml
-Sitemap: https://corentin-gautier.github.io/core-blocks-enhancer/sitemap.xml
-Sitemap: https://corentin-gautier.github.io/restyle-for-twitch/sitemap.xml

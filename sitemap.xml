@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://corentin-gautier.github.io/</loc>
-    <lastmod>2026-10-24</lastmod>
-  </url>
-  <url>
-    <loc>https://corentin-gautier.github.io/snap-carousel/</loc>
-  </url>
-  <url>
-    <loc>https://corentin-gautier.github.io/core-blocks-enhancer/</loc>
-  </url>
-  <url>
-    <loc>https://corentin-gautier.github.io/cassonade/</loc>
-  </url>
-  <url>
-    <loc>https://corentin-gautier.github.io/restyle-for-twitch/</loc>
-  </url>
-</urlset>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>https://corentin-gautier.github.io/sitemap-main.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://corentin-gautier.github.io/cassonade/sitemap.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://corentin-gautier.github.io/snap-carousel/sitemap.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://corentin-gautier.github.io/core-blocks-enhancer/sitemap.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://corentin-gautier.github.io/restyle-for-twitch/sitemap.xml</loc>
+  </sitemap>
+</sitemapindex>
