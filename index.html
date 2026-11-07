@@ -105,9 +105,17 @@
 </head>
 
 <body>
+  <script>document.documentElement.classList.add('js')</script>
   <a class="skip-link" href="#contenu">Aller au contenu</a>
 
-  <header class="site-header">
+  <svg class="sprite" aria-hidden="true">
+    <symbol id="fleche" viewBox="0 0 48 48">
+      <path d="M6 42C10 24 22 11 40 7M40 7l-10-1M40 7l-5 9" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" />
+    </symbol>
+  </svg>
+
+  <header class="site-header" data-inspect="header · position: sticky">
     <div class="container site-header__inner">
       <a class="wordmark" href="/" aria-label="Corentin Gautier, accueil">
         <span class="wordmark__mark" aria-hidden="true">
@@ -128,6 +136,9 @@
           Poids téléchargé par cette page jusqu'ici. Il monte pendant le défilement.
         </span>
       </p>
+      <button class="inspect-toggle js-only" type="button" aria-pressed="false" data-inspect-toggle>
+        <span class="inspect-toggle__icon" aria-hidden="true"></span>Inspecter
+      </button>
       <nav aria-label="Navigation principale">
         <ul class="nav">
           <li><a href="#services">Services</a></li>
@@ -143,21 +154,48 @@
 
   <main id="contenu">
 
-    <section class="hero">
-      <div class="container hero__inner">
-        <div class="hero__text">
-          <h1>
+    <section class="hero" data-inspect="section.hero">
+      <div class="container">
+        <p class="hero__kicker">
+          <span class="status-dot" aria-hidden="true"></span>
+          Freelance · Bordeaux ou à distance · disponible pour de nouveaux projets
+        </p>
+
+        <div class="duo" data-duo data-inspect="h1 · system-ui, serif, mono · 0 police téléchargée">
+          <h1 class="duo__design">
             Web <span class="voice-design">designer</span> &amp; <span class="voice-code">développeur</span>
             front-end freelance, pour un web plus&nbsp;<em>léger</em>.
           </h1>
-          <p class="lead">
-            Un seul interlocuteur de la maquette au code, pour des sites rapides, accessibles et faciles à faire vivre.
-            Au moins on évite les problèmes de communication entre le développeur et le designer, enfin si j'ai bien
-            dormi ...
-          </p>
-          <p class="actions">
-            <a class="button" href="#contact">Parler de votre projet</a>
-            <a class="button button--ghost" href="#design">Voir mes réalisations</a>
+          <div class="duo__code" aria-hidden="true">
+            <p class="duo__file">index.html</p>
+            <code><span class="duo__tag">&lt;h1&gt;</span>Web designer &amp;amp; développeur front-end freelance,
+              pour un web plus <span class="duo__tag">&lt;em&gt;</span>léger<span class="duo__tag">&lt;/em&gt;</span>.<span
+                class="duo__tag">&lt;/h1&gt;</span></code>
+          </div>
+          <span class="duo__handle" aria-hidden="true"></span>
+        </div>
+
+        <div class="hero__bottom">
+          <div>
+            <label class="duo__control js-only">
+              <span>design</span>
+              <input type="range" min="0" max="100" value="100" data-duo-range
+                aria-label="Faire glisser le titre de sa version design vers son code source">
+              <span>code</span>
+            </label>
+            <p class="lead">
+              Un seul interlocuteur de la maquette au code, pour des sites rapides, accessibles et faciles à faire vivre.
+              Au moins on évite les problèmes de communication entre le développeur et le designer, enfin si j'ai bien
+              dormi ...
+            </p>
+            <p class="actions">
+              <a class="button" href="#contact">Parler de votre projet</a>
+              <a class="button button--ghost" href="#design">Voir mes réalisations</a>
+            </p>
+          </div>
+          <p class="note note--hero js-only">
+            <svg class="note__arrow" aria-hidden="true"><use href="#fleche" /></svg>
+            <span class="if-hover">Survolez le titre ou faites</span><span class="if-touch">Faites</span> glisser le curseur : la même phrase, côté design et côté code.
           </p>
         </div>
 
@@ -179,56 +217,107 @@
             <dd>Nouveaux projets</dd>
           </div>
         </dl>
-
       </div>
     </section>
 
-    <section id="services" class="section">
-      <div class="container">
-        <header class="section__head">
+    <section id="services" class="section" data-inspect="section#services · grid 5fr 7fr">
+      <div class="container split">
+        <header class="section__head split__aside">
           <h2>Ce que je peux faire pour vous</h2>
           <p>
             Entreprises, associations, agences ou startups : sites vitrines, éditoriaux, boutiques en ligne,
             applications métier ou mobiles. Je prends en charge le design, le code, ou les deux.
-            <br>
-            <small style="font-family: var(--mono);font-size: 10px;">(tant que c'est pas du back ...)</small>
           </p>
+          <p class="aside-joke">(tant que c'est pas du back ...)</p>
         </header>
 
-        <ul class="services">
-          <li>
-            <h3>Votre site WordPress sur mesure</h3>
-            <p>
-              De la maquette à la mise en ligne : thème sur mesure, blocs Gutenberg dédiés, WooCommerce.
-              Léger par défaut, et simple à mettre à jour par vos équipes.
-            </p>
-          </li>
-          <li>
-            <h3>Web design &amp; identité</h3>
-            <p>
-              Maquettes, design system, logo et charte graphique. Des interfaces pensées
-              pour vos contenus et pour les personnes qui les consultent.
-            </p>
-          </li>
-          <li>
-            <h3>Renfort front-end</h3>
-            <p>
-              Pour une agence ou une équipe produit : intégration, HTML, CSS et JavaScript, Angular ou React.
-              Du code lisible, que votre équipe pourra reprendre.
-            </p>
-          </li>
-          <li>
-            <h3>Audit éco-conception &amp; accessibilité</h3>
-            <p>
-              Un diagnostic chiffré de votre site existant (poids, performance, accessibilité, référencement)
-              et un plan d'actions priorisé, que je peux aussi mettre en œuvre.
-            </p>
-          </li>
-        </ul>
+        <div>
+          <div class="devis" data-inspect="div.devis">
+            <p class="stamp" aria-hidden="true">Bon pour accord&nbsp;?</p>
+            <div class="devis__meta">
+              <p class="devis__title">Devis</p>
+              <dl>
+                <div>
+                  <dt>N°</dt>
+                  <dd>2026-001</dd>
+                </div>
+                <div>
+                  <dt>Date</dt>
+                  <dd data-today>aujourd'hui</dd>
+                </div>
+                <div>
+                  <dt>Client</dt>
+                  <dd>Vous</dd>
+                </div>
+                <div>
+                  <dt>Prestataire</dt>
+                  <dd>Corentin Gautier</dd>
+                </div>
+              </dl>
+            </div>
+
+            <ol class="devis__lines">
+              <li>
+                <div class="devis__row">
+                  <h3>Votre site WordPress sur mesure</h3>
+                  <span class="leader" aria-hidden="true"></span>
+                  <span class="devis__format">Forfait</span>
+                </div>
+                <p>
+                  De la maquette à la mise en ligne : thème sur mesure, blocs Gutenberg dédiés, WooCommerce.
+                  Léger par défaut, et simple à mettre à jour par vos équipes.
+                </p>
+              </li>
+              <li>
+                <div class="devis__row">
+                  <h3>Web design &amp; identité</h3>
+                  <span class="leader" aria-hidden="true"></span>
+                  <span class="devis__format">Forfait</span>
+                </div>
+                <p>
+                  Maquettes, design system, logo et charte graphique. Des interfaces pensées
+                  pour vos contenus et pour les personnes qui les consultent.
+                </p>
+              </li>
+              <li>
+                <div class="devis__row">
+                  <h3>Renfort front-end</h3>
+                  <span class="leader" aria-hidden="true"></span>
+                  <span class="devis__format">Au jour</span>
+                </div>
+                <p>
+                  Pour une agence ou une équipe produit : intégration, HTML, CSS et JavaScript, Angular ou React.
+                  Du code lisible, que votre équipe pourra reprendre.
+                </p>
+              </li>
+              <li>
+                <div class="devis__row">
+                  <h3>Audit éco-conception &amp; accessibilité</h3>
+                  <span class="leader" aria-hidden="true"></span>
+                  <span class="devis__format">Forfait</span>
+                </div>
+                <p>
+                  Un diagnostic chiffré de votre site existant (poids, performance, accessibilité, référencement)
+                  et un plan d'actions priorisé, que je peux aussi mettre en œuvre.
+                </p>
+              </li>
+            </ol>
+
+            <div class="devis__total">
+              <p><span>Premier échange</span><span class="leader" aria-hidden="true"></span><strong>Offert</strong></p>
+              <p><span>Total</span><span class="leader" aria-hidden="true"></span><strong>À définir ensemble</strong></p>
+            </div>
+          </div>
+
+          <p class="note note--devis">
+            <svg class="note__arrow" aria-hidden="true"><use href="#fleche" /></svg>
+            Le prix dépend de votre projet : on le fixe ensemble dès le premier échange, avant de commencer.
+          </p>
+        </div>
       </div>
     </section>
 
-    <section id="eco-conception" class="section">
+    <section id="eco-conception" class="section" data-inspect="section#eco-conception">
       <div class="container">
         <header class="section__head section__head--leaf">
           <svg class="section__leaf" viewBox="13.5 13.5 37 37" aria-hidden="true">
@@ -276,123 +365,136 @@
             </li>
           </ul>
 
-          <aside class="audit" aria-labelledby="audit-titre">
-            <h3 id="audit-titre">Cette page, preuve à l'appui</h3>
-            <p class="audit__weight" data-page-weight>&lt; 300&nbsp;ko</p>
-            <p>téléchargés pour l'afficher</p>
+          <div class="receipt-wrap">
+            <aside class="receipt" aria-labelledby="audit-titre" data-inspect="aside.receipt · mask zigzag">
+              <h3 class="receipt__shop" id="audit-titre">Ticket · cette page</h3>
+              <p class="receipt__sub">Corentin Gautier, freelance<br>Bordeaux</p>
+              <dl class="receipt__lines">
+                <div>
+                  <dt>Requêtes</dt>
+                  <dd data-page-requests>moins de 20</dd>
+                </div>
+                <div>
+                  <dt>Framework JavaScript</dt>
+                  <dd>0</dd>
+                </div>
+                <div>
+                  <dt>Polices téléchargées</dt>
+                  <dd>0</dd>
+                </div>
+                <div>
+                  <dt>Cookies et traceurs</dt>
+                  <dd>0</dd>
+                </div>
+              </dl>
+              <p class="receipt__total">
+                <span>Total téléchargé</span>
+                <strong data-page-weight>&lt; 300&nbsp;ko</strong>
+              </p>
 
-            <div class="gauge">
-              <span>Cette page</span>
-              <span class="gauge__track">
-                <span class="gauge__bar" data-page-bar style="width: 12%"></span>
-              </span>
-              <span class="gauge__median">Page web médiane : <a href="https://httparchive.org/reports/page-weight"
-                  rel="noopener" target="_blank">environ 2,5&nbsp;Mo</a></span>
-            </div>
-
-            <dl class="audit__facts">
-              <div>
-                <dt>Requêtes</dt>
-                <dd data-page-requests>moins de 20</dd>
+              <div class="gauge">
+                <span>Cette page</span>
+                <span class="gauge__track">
+                  <span class="gauge__bar" data-page-bar style="width: 12%"></span>
+                </span>
+                <span class="gauge__median">Page web médiane : <a href="https://httparchive.org/reports/page-weight"
+                    rel="noopener" target="_blank">environ 2,5&nbsp;Mo</a></span>
               </div>
-              <div>
-                <dt>Framework JavaScript</dt>
-                <dd>aucun</dd>
-              </div>
-              <div>
-                <dt>Polices téléchargées</dt>
-                <dd>0</dd>
-              </div>
-              <div>
-                <dt>Cookies et traceurs</dt>
-                <dd>0</dd>
-              </div>
-            </dl>
-            <p class="audit__note" data-page-note hidden>
-              Mesuré en direct dans votre navigateur. Le chiffre monte pendant le défilement :
-              chaque image n'est téléchargée qu'à l'approche de l'écran.
-            </p>
-          </aside>
+              <p class="receipt__thanks">Merci de votre visite</p>
+            </aside>
+          </div>
         </div>
+
+        <p class="note note--receipt" data-page-note hidden>
+          <svg class="note__arrow" aria-hidden="true"><use href="#fleche" /></svg>
+          Mesuré en direct dans votre navigateur, pas un chiffre marketing. Il monte pendant le défilement :
+          chaque image n'est téléchargée qu'à l'approche de l'écran.
+        </p>
       </div>
     </section>
 
-    <section id="design" class="section">
+    <section id="design" class="section" data-inspect="section#design">
       <div class="container">
-        <header class="section__head">
+        <header class="section__head section__head--with-note">
           <h2>Web design : quelques réalisations</h2>
           <p>
             Identités, sites et interfaces réalisés ces dernières années.
             Le reste est sur <a href="https://dribbble.com/Median" rel="me noopener" target="_blank">mon profil
               Dribbble</a>.
           </p>
+          <p class="note note--shots">
+            Ce carrousel pèse 4&nbsp;ko, et c'est moi qui l'ai codé. Le poids de chaque image s'affiche dessus.
+            <svg class="note__arrow" aria-hidden="true"><use href="#fleche" /></svg>
+          </p>
         </header>
       </div>
 
       <div class="container container--wide">
-        <snap-carousel class="shots" displayed="1.15" gap="20" controls nav prev-label="Précédent" next-label="Suivant"
+        <snap-carousel class="shots" displayed="1.15" gap="24" controls nav prev-label="Précédent" next-label="Suivant"
           responsive='[{"breakpoint":700,"settings":{"displayed":2.2}},{"breakpoint":1100,"settings":{"displayed":3.2}}]'>
           <ul slot="scroller">
             <li class="shot">
-              <picture>
+              <picture data-inspect="picture">
                 <source srcset="/assets/img/easynode-landing.avif" type="image/avif">
                 <img src="/assets/img/easynode-landing.jpg" width="960" height="640"
                   alt="Landing page EasyNode : fond violet, grand titre « Node running made easy » et mascotte ours polaire.">
               </picture>
+              <p class="shot__weight" data-shot-weight>image</p>
               <h3><a href="https://dribbble.com/shots/27145069-Easynode-Landing" rel="noopener"
-                  target="_blank">EasyNode, landing
-                  page</a></h3>
+                  target="_blank">EasyNode, landing page</a></h3>
               <p>Identité de marque, mascotte et web design</p>
             </li>
             <li class="shot">
-              <picture>
+              <picture data-inspect="picture">
                 <source srcset="/assets/img/easynode-marketplace.avif" type="image/avif">
                 <img src="/assets/img/easynode-marketplace.jpg" width="960" height="640" loading="lazy"
                   alt="Marketplace EasyNode : grille de cartes de nœuds blockchain sur fond jaune.">
               </picture>
+              <p class="shot__weight" data-shot-weight>image</p>
               <h3><a href="https://dribbble.com/shots/27145049-Easynode-Marketplace" rel="noopener"
-                  target="_blank">EasyNode,
-                  marketplace</a></h3>
+                  target="_blank">EasyNode, marketplace</a></h3>
               <p>Design system et interface d'application</p>
             </li>
             <li class="shot">
-              <picture>
+              <picture data-inspect="picture">
                 <source srcset="/assets/img/jack-in-the-box.avif" type="image/avif">
                 <img src="/assets/img/jack-in-the-box.jpg" width="960" height="640" loading="lazy"
                   alt="Page d'accueil du site Jack In The Box : titre « Proposal Management » et illustration isométrique.">
               </picture>
+              <p class="shot__weight" data-shot-weight>image</p>
               <h3><a href="https://dribbble.com/shots/24289943-Web-design-for-Jack-In-The-Box" rel="noopener"
-                  target="_blank">Jack In
-                  The Box</a></h3>
+                  target="_blank">Jack In The Box</a></h3>
               <p>Web design</p>
             </li>
             <li class="shot">
-              <picture>
+              <picture data-inspect="picture">
                 <source srcset="/assets/img/nouvelles-renaissances.avif" type="image/avif">
                 <img src="/assets/img/nouvelles-renaissances.jpg" width="960" height="640" loading="lazy"
                   alt="Maquette du site Nouvelles Renaissances.">
               </picture>
+              <p class="shot__weight" data-shot-weight>image</p>
               <h3><a href="https://dribbble.com/shots/24289872-Web-Design-for-Nouvelles-Renaissances" rel="noopener"
                   target="_blank">Nouvelles Renaissances</a></h3>
               <p>Web design</p>
             </li>
             <li class="shot">
-              <picture>
+              <picture data-inspect="picture">
                 <source srcset="/assets/img/project-management-ui.avif" type="image/avif">
                 <img src="/assets/img/project-management-ui.jpg" width="960" height="640" loading="lazy"
                   alt="Interface de suivi de dossiers : fil d'étapes, fiche des tiers et synthèse financière.">
               </picture>
+              <p class="shot__weight" data-shot-weight>image</p>
               <h3><a href="https://dribbble.com/shots/24287730-Project-Management-UI" rel="noopener"
-                  target="_blank">Gestion de
-                  projets</a></h3>
+                  target="_blank">Gestion de projets</a></h3>
               <p>UI design d'application métier</p>
             </li>
             <li class="shot">
-              <picture>
+              <picture data-inspect="picture">
                 <source srcset="/assets/img/stream-overlay.avif" type="image/avif">
                 <img src="/assets/img/stream-overlay.jpg" width="960" height="640" loading="lazy"
                   alt="Habillage de live : écran « Le live va bientôt commencer » sur fond turquoise avec un buste antique.">
               </picture>
+              <p class="shot__weight" data-shot-weight>image</p>
               <h3><a href="https://dribbble.com/shots/14966251-Stream-Overlay" rel="noopener" target="_blank">Stream
                   overlay</a></h3>
               <p>Habillage de live et identité personnelle</p>
@@ -402,7 +504,7 @@
       </div>
     </section>
 
-    <section id="code" class="section section--code">
+    <section id="code" class="section section--code" data-inspect="section#code · thème sombre forcé">
       <div class="container">
         <header class="section__head">
           <h2>Développement : des outils faits maison</h2>
@@ -513,7 +615,7 @@
       </div>
     </section>
 
-    <section id="methode" class="section">
+    <section id="methode" class="section" data-inspect="section#methode · grid 4 colonnes">
       <div class="container">
         <header class="section__head">
           <h2>Comment on travaille ensemble</h2>
@@ -522,8 +624,9 @@
           </p>
         </header>
 
-        <ol class="services">
+        <ol class="steps">
           <li>
+            <p class="steps__num" aria-hidden="true">01</p>
             <h3>Un premier échange</h3>
             <p>
               On parle de votre projet, de vos objectifs, de vos délais et de votre budget.
@@ -531,6 +634,7 @@
             </p>
           </li>
           <li>
+            <p class="steps__num" aria-hidden="true">02</p>
             <h3>Une proposition claire</h3>
             <p>
               Un périmètre détaillé et un devis au forfait, ou au jour pour une mission de renfort.
@@ -538,6 +642,7 @@
             </p>
           </li>
           <li>
+            <p class="steps__num" aria-hidden="true">03</p>
             <h3>Le design, puis le code</h3>
             <p>
               Les maquettes sont validées avant le développement. Vous suivez l'avancement
@@ -545,6 +650,7 @@
             </p>
           </li>
           <li>
+            <p class="steps__num" aria-hidden="true">04</p>
             <h3>La mise en ligne et après</h3>
             <p>
               Mise en production, prise en main de l'administration et documentation.
@@ -555,10 +661,10 @@
       </div>
     </section>
 
-    <section id="parcours" class="section">
+    <section id="parcours" class="section" data-inspect="section#parcours · git log">
       <div class="container">
         <div class="about__intro">
-          <picture class="portrait">
+          <picture class="portrait" data-inspect="picture">
             <source srcset="/assets/img/corentin-gautier.avif" type="image/avif">
             <img src="/assets/img/corentin-gautier.jpg" width="240" height="240" loading="lazy"
               alt="Portrait de Corentin Gautier">
@@ -572,7 +678,15 @@
           </p>
         </div>
 
+        <p class="timeline__command" aria-hidden="true">$ git log --parcours</p>
         <ol class="timeline">
+          <li class="timeline__next">
+            <p class="timeline__dates"><span class="timeline__head">HEAD</span> La suite</p>
+            <h3>Freelance <span>Votre projet ?</span></h3>
+            <p>
+              Le prochain chapitre s'écrit avec vous. <a href="#contact">Parlons-en</a>.
+            </p>
+          </li>
           <li>
             <p class="timeline__dates"><time datetime="2024-11">Nov. 2024</time> – <time datetime="2026-02">févr.
                 2026</time></p>
@@ -589,7 +703,7 @@
                 2024</time></p>
             <h3>Développeur front-end, UI designer &amp; expert technique <span>Conserto</span></h3>
             <p>
-              Développement WordPress, front-end, Angular,React et mobile hybride (Cordova, Capacitor). Web design,
+              Développement WordPress, front-end, Angular, React et mobile hybride (Cordova, Capacitor). Web design,
               éco-conception et accessibilité, conseil technique et avant-vente.
             </p>
           </li>
@@ -610,29 +724,71 @@
       </div>
     </section>
 
-    <section id="contact" class="section contact">
-      <div class="container container--narrow">
-        <h2>Un projet en tête ?</h2>
-        <p class="lead">
-          Un site à créer ou à refondre, des maquettes, un renfort sur votre équipe, un audit ?
-          Parlez-moi de votre projet : le premier échange est gratuit et sans engagement.
-        </p>
-        <p class="actions">
-          <a class="button" href="https://www.linkedin.com/in/corentin-gautier-513b928a" rel="me noopener" target="_blank">Me contacter
-            sur LinkedIn</a>
-          <a class="button button--ghost" href="#design">Revoir mes réalisations</a>
-        </p>
-        <ul class="contact__links">
-          <li><a href="https://github.com/corentin-gautier" rel="me noopener" target="_blank">GitHub</a></li>
-          <li><a href="https://dribbble.com/Median" rel="me noopener" target="_blank">Dribbble</a></li>
-          <li><a href="https://www.linkedin.com/in/corentin-gautier-513b928a" rel="me noopener" target="_blank">LinkedIn</a></li>
-        </ul>
+    <section id="contact" class="section contact" data-inspect="section#contact">
+      <div class="container contact__inner">
+        <div class="contact__intro">
+          <h2>Un projet en tête ?</h2>
+          <p class="lead">
+            Un site à créer ou à refondre, des maquettes, un renfort sur votre équipe, un audit ?
+            Parlez-moi de votre projet : le premier échange est gratuit et sans engagement.
+          </p>
+          <p class="actions">
+            <a class="button" href="https://www.linkedin.com/in/corentin-gautier-513b928a" rel="me noopener"
+              target="_blank">Me contacter sur LinkedIn</a>
+          </p>
+          <ul class="contact__links">
+            <li><a href="https://github.com/corentin-gautier" rel="me noopener" target="_blank">GitHub</a></li>
+            <li><a href="https://dribbble.com/Median" rel="me noopener" target="_blank">Dribbble</a></li>
+            <li><a href="https://www.linkedin.com/in/corentin-gautier-513b928a" rel="me noopener" target="_blank">LinkedIn</a></li>
+          </ul>
+        </div>
+
+        <form class="brief js-only" data-brief data-inspect="form.brief · 0 donnée envoyée">
+          <h3 class="brief__title">Préparez votre message</h3>
+          <p class="brief__intro">Rien n'est envoyé : le texte est copié, vous le collez dans LinkedIn.</p>
+
+          <fieldset class="brief__field">
+            <legend>Votre projet</legend>
+            <div class="chips">
+              <label><input type="checkbox" name="type" value="un site vitrine"> Site vitrine</label>
+              <label><input type="checkbox" name="type" value="une boutique en ligne"> Boutique en ligne</label>
+              <label><input type="checkbox" name="type" value="la refonte d'un site existant"> Refonte</label>
+              <label><input type="checkbox" name="type" value="des maquettes ou une identité visuelle"> Design &amp; identité</label>
+              <label><input type="checkbox" name="type" value="un renfort front-end"> Renfort front-end</label>
+              <label><input type="checkbox" name="type" value="un audit d'éco-conception et d'accessibilité"> Audit</label>
+            </div>
+          </fieldset>
+
+          <div class="brief__field">
+            <label for="brief-delai">Échéance</label>
+            <select id="brief-delai" name="delai">
+              <option value="">Je ne sais pas encore</option>
+              <option value="dès que possible">Dès que possible</option>
+              <option value="dans un à trois mois">Dans 1 à 3 mois</option>
+              <option value="dans plus de trois mois">Dans plus de 3 mois</option>
+            </select>
+          </div>
+
+          <div class="brief__field">
+            <label for="brief-mots">En quelques mots</label>
+            <textarea id="brief-mots" name="mots" rows="3"
+              placeholder="Votre activité, ce que vous avez en tête, un site que vous aimez…"></textarea>
+          </div>
+
+          <p class="brief__label" id="brief-apercu">Aperçu</p>
+          <output class="brief__preview" data-brief-preview aria-labelledby="brief-apercu"></output>
+
+          <p class="brief__actions">
+            <button class="button" type="submit">Copier le message</button>
+            <span class="brief__status" role="status" data-brief-status></span>
+          </p>
+        </form>
       </div>
     </section>
 
   </main>
 
-  <footer class="site-footer">
+  <footer class="site-footer" data-inspect="footer">
     <div class="container site-footer__inner">
       <p>© 2026 Corentin Gautier, web designer et développeur front-end freelance à Bordeaux.</p>
       <p>Site statique, sans cookie ni traceur. <a href="https://ko-fi.com/corentingautier" rel="me noopener" target="_blank">Me soutenir sur Ko-fi</a></p>
@@ -640,14 +796,17 @@
   </footer>
 
   <script type="module">
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => document.querySelectorAll(selector);
+
     // Poids réellement téléchargé par cette page, comparé à la page web médiane
     const MEDIAN_BYTES = 2_500_000;
-    const set = (name, value) =>
-      document.querySelectorAll(`[data-page-${name}]`).forEach((el) => { el.textContent = value; });
+    const kilo = (bytes) => `${Math.max(1, Math.round(bytes / 1000))} ko`;
+    const set = (name, value) => $$(`[data-page-${name}]`).forEach((el) => { el.textContent = value; });
 
     // Infobulle du compteur : affichée quelques secondes quand le poids monte après le chargement
-    const meter = document.querySelector('[data-page-meter]');
-    const delta = document.querySelector('[data-page-delta]');
+    const meter = $('[data-page-meter]');
+    const delta = $('[data-page-delta]');
     let lastBytes = 0;
     let settled = false;
     let gained = 0;
@@ -655,7 +814,7 @@
 
     const flash = (bytes) => {
       gained += bytes;
-      delta.textContent = `+${Math.max(1, Math.round(gained / 1000))}\u00a0ko à l'instant.`;
+      delta.textContent = `+${kilo(gained)} à l'instant.`;
       delta.hidden = false;
       meter.classList.add('is-fresh');
       clearTimeout(hideTimer);
@@ -664,6 +823,19 @@
         delta.hidden = true;
         gained = 0;
       }, 3500);
+    };
+
+    // Le poids de chaque image, affiché sur l'image et dans le mode inspection
+    const labelImages = (sizes) => {
+      $$('picture img').forEach((img) => {
+        const bytes = sizes.get(img.currentSrc);
+        if (!bytes) return;
+        const format = img.currentSrc.split('.').pop().toUpperCase();
+        const label = `${format} · ${kilo(bytes)}`;
+        img.parentElement.dataset.inspect = `img · ${label}`;
+        const chip = img.closest('.shot')?.querySelector('[data-shot-weight]');
+        if (chip) chip.textContent = label;
+      });
     };
 
     const measure = () => {
@@ -676,10 +848,11 @@
       if (settled && bytes > lastBytes) flash(bytes - lastBytes);
       lastBytes = bytes;
 
-      set('weight', `${Math.round(bytes / 1000)}\u00a0ko`);
+      set('weight', kilo(bytes));
       set('requests', entries.length);
-      document.querySelector('[data-page-bar]').style.width = `${(bytes / MEDIAN_BYTES) * 100}%`;
-      document.querySelector('[data-page-note]').hidden = false;
+      $('[data-page-bar]').style.width = `${(bytes / MEDIAN_BYTES) * 100}%`;
+      $('[data-page-note]').hidden = false;
+      labelImages(new Map(entries.map((entry) => [entry.name, entry.encodedBodySize])));
     };
 
     new PerformanceObserver(measure).observe({ type: 'resource', buffered: true });
@@ -687,9 +860,72 @@
       measure();
       setTimeout(() => { settled = true; }, 1500);
     });
+    $$('picture img').forEach((img) => img.addEventListener('load', () => setTimeout(measure, 50)));
     meter.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') event.target.blur();
     });
+
+    // Titre design / code : le curseur, ou la souris au survol
+    const duo = $('[data-duo]');
+    const range = $('[data-duo-range]');
+    const split = (value) => {
+      duo.style.setProperty('--split', `${value}%`);
+      range.value = value;
+    };
+    range.addEventListener('input', () => split(range.value));
+    duo.addEventListener('pointermove', (event) => {
+      if (event.pointerType !== 'mouse') return;
+      const box = duo.getBoundingClientRect();
+      split(Math.round(Math.min(1, Math.max(0, (event.clientX - box.left) / box.width)) * 100));
+    });
+    duo.addEventListener('pointerleave', () => split(100));
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      duo.classList.add('is-peeking');
+      duo.addEventListener('animationend', () => duo.classList.remove('is-peeking'), { once: true });
+    }
+
+    // Mode inspection : la structure de la page, sa grille et le poids des images
+    const inspect = $('[data-inspect-toggle]');
+    inspect.addEventListener('click', () => {
+      const on = document.documentElement.classList.toggle('is-inspecting');
+      inspect.setAttribute('aria-pressed', on);
+    });
+
+    // La date du devis
+    $('[data-today]').textContent = new Date().toLocaleDateString('fr-FR');
+
+    // Préparation du message de contact
+    const brief = $('[data-brief]');
+    const preview = $('[data-brief-preview]');
+    const status = $('[data-brief-status]');
+    const list = (items) => items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} et ${items.at(-1)}`;
+    const compose = () => {
+      const data = new FormData(brief);
+      const types = data.getAll('type');
+      const delai = data.get('delai');
+      const mots = data.get('mots').trim();
+      const lines = ['Bonjour Corentin,', ''];
+      lines.push(types.length ? `Je vous contacte pour ${list(types)}.` : 'Je vous contacte au sujet d\'un projet web.');
+      if (delai) lines.push(`Échéance : ${delai}.`);
+      if (mots) lines.push('', mots);
+      lines.push('', 'Pouvons-nous en parler ?');
+      return lines.join('\n');
+    };
+    const refresh = () => {
+      preview.textContent = compose();
+      status.textContent = '';
+    };
+    brief.addEventListener('input', refresh);
+    brief.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      try {
+        await navigator.clipboard.writeText(compose());
+        status.innerHTML = 'Copié. <a href="https://www.linkedin.com/in/corentin-gautier-513b928a" rel="noopener" target="_blank">Ouvrez LinkedIn</a> et collez-le dans un message.';
+      } catch {
+        status.textContent = 'La copie a échoué : sélectionnez l\'aperçu et copiez-le à la main.';
+      }
+    });
+    refresh();
   </script>
 </body>
 
