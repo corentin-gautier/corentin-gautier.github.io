@@ -16,9 +16,9 @@
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
   --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 
-  --gutter: clamp(1.25rem, 3.5vw, 3.5rem);
+  --gutter: clamp(1.5rem, 3.5vw, 3.5rem);
   --gap: clamp(1rem, 2vw, 2rem);
-  --section: clamp(5rem, 13vw, 12rem);
+  --section: clamp(6rem, 13vw, 12rem);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -205,6 +205,19 @@ a:hover {
   font-size: 0.95rem;
   white-space: nowrap;
   scrollbar-width: none;
+}
+
+/* Phones: the nav line fades out on the right, so it reads as scrollable */
+@media (max-width: 61.99rem) {
+  .site-header nav {
+    margin-right: calc(var(--gutter) * -1);
+  }
+
+  .nav {
+    padding-right: 2rem;
+    -webkit-mask-image: linear-gradient(to right, #000 80%, transparent);
+    mask-image: linear-gradient(to right, #000 80%, transparent);
+  }
 }
 
 .nav a {
@@ -418,7 +431,7 @@ a:hover {
 }
 
 .services__list li {
-  padding-block: clamp(1.25rem, 2.5vw, 2rem);
+  padding-block: clamp(1.75rem, 2.5vw, 2rem);
   border-top: 1px solid var(--ink);
 }
 
@@ -1268,6 +1281,73 @@ html:has(.lightbox[open]) {
 
   .contact__links {
     grid-column: 7 / -1;
+  }
+}
+
+/* Phones: fewer things at once, more room around them */
+@media (max-width: 61.99rem) {
+  /* The weight comparison at a size that leaves the text room */
+  .weight__median {
+    width: 78%;
+  }
+
+  /* The header counter already says it is measured live */
+  .eco__facts [data-page-note] {
+    display: none;
+  }
+
+  /* Each project opens on its picture, then the words */
+  .work__item {
+    gap: 1.25rem;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .work__media {
+    order: -1;
+  }
+
+  .work__item + .work__item {
+    margin-top: 1.5rem;
+  }
+
+  .career__portrait {
+    width: 7rem;
+  }
+}
+
+/* Small phones: one picture per project, prices on one line with their name */
+@media (max-width: 39.99rem) {
+  .work__item--duo .work__media picture:nth-child(n + 2),
+  .work__item--duo .work__media .work__zoom:nth-child(n + 2) {
+    display: none;
+  }
+
+  .pricing__list li {
+    display: flex;
+    flex-direction: column;
+    padding-block: 1.5rem;
+  }
+
+  .pricing__list h3 {
+    order: -1;
+    margin-top: 0;
+    font-size: 1.15rem;
+  }
+
+  .pricing__price {
+    margin-top: 0.35rem;
+    font-size: 2.1rem;
+  }
+
+  .pricing__from {
+    display: inline;
+    margin-right: 0.45rem;
+    font-size: 0.85rem;
+  }
+
+  .pricing__list h3 + p {
+    margin-top: 0.5rem;
   }
 }
 
