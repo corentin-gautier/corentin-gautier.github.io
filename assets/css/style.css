@@ -476,7 +476,7 @@ main {
   width: 4.5rem;
   height: 4.5rem;
   margin-bottom: 2rem;
-  color: var(--accent-text);
+  color: var(--ink);
 }
 
 @media (min-width: 60rem) {
@@ -1069,17 +1069,6 @@ main {
 .contact .button--ghost:hover {
   background: var(--on-accent);
   color: var(--accent);
-}
-
-.button--kofi {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.button--kofi svg {
-  flex: none;
-  margin-block: -0.2rem;
 }
 
 .contact a:not(.button):hover {
