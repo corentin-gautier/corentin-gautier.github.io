@@ -567,7 +567,7 @@ a:hover {
   }
 }
 
-/* Work: an uneven spread, like a magazine page */
+/* Work: one project per row, the words on the left, the pictures on the right */
 
 .work {
   padding-bottom: var(--section);
@@ -579,55 +579,187 @@ a:hover {
 }
 
 .work__list {
-  display: grid;
-  gap: 3rem;
   margin-top: clamp(3rem, 6vw, 5rem);
 }
 
-.work__list a {
-  display: block;
-  text-decoration: none;
+.work__item {
+  display: grid;
+  gap: 1.5rem;
+  padding-block: 1.25rem clamp(2.5rem, 5vw, 4.5rem);
+  border-top: 1px solid var(--ink);
 }
 
-.work__list picture {
+.work__text h3 {
+  font-size: clamp(2rem, 4.4vw, 4.4rem);
+  font-weight: 600;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.work__what {
+  margin-top: 0.6rem;
+  font-weight: 600;
+}
+
+.work__what + p {
+  margin-top: 0.75rem;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+.work__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  margin-top: 1.25rem;
+  font-weight: 600;
+}
+
+.work__media {
+  display: grid;
+  gap: var(--gap);
+  align-items: end;
+}
+
+.work__media picture {
   display: block;
   overflow: hidden;
   background: var(--line);
 }
 
-.work__list img {
+.work__media img {
   width: 100%;
   aspect-ratio: 3 / 2;
   object-fit: cover;
+}
+
+.work__zoom {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+.work__zoom img {
   transition: scale 0.4s ease;
 }
 
-.work__list a:hover img {
+.work__zoom:hover img {
   scale: 1.03;
 }
 
-.work__name {
-  display: block;
-  margin-top: 0.9rem;
-  font-weight: 650;
-  letter-spacing: -0.01em;
+/* Lightbox: the picture at full size on a dark screen */
+.lightbox {
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 4.5rem clamp(1rem, 6vw, 6rem) 1.5rem;
+  border: 0;
+  background: rgb(14 15 12 / 0.95);
+  color: #eeefe6;
 }
 
-.work__list a:hover .work__name {
-  text-decoration: underline;
-  text-decoration-color: var(--accent);
-  text-decoration-thickness: 0.3em;
+.lightbox[open] {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  place-items: center;
+  gap: 1rem;
+  animation: fade-in 0.2s ease;
 }
 
-.work__what {
-  display: block;
-  color: var(--muted);
-  font-size: 0.92rem;
+.lightbox::backdrop {
+  background: transparent;
 }
 
-/* On phones, every other shot steps aside */
-.work__list li:nth-child(even) {
-  margin-left: 18%;
+.lightbox__img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.lightbox__caption {
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.lightbox__btn {
+  position: fixed;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid rgb(238 239 230 / 0.35);
+  border-radius: 50%;
+  background: rgb(14 15 12 / 0.6);
+  color: inherit;
+  font: inherit;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.lightbox__btn:hover {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.lightbox :focus-visible {
+  outline-color: #eeefe6;
+}
+
+.lightbox__close {
+  top: 1rem;
+  right: 1rem;
+}
+
+.lightbox__prev,
+.lightbox__next {
+  top: 50%;
+  translate: 0 -50%;
+}
+
+.lightbox__prev {
+  left: 1rem;
+}
+
+.lightbox__next {
+  right: 1rem;
+}
+
+/* On phones the arrows sit at the bottom, out of the picture's way */
+@media (max-width: 47.99rem) {
+  .lightbox {
+    padding-bottom: 5rem;
+  }
+
+  .lightbox__prev,
+  .lightbox__next {
+    top: auto;
+    bottom: 1rem;
+    translate: none;
+  }
+}
+
+html:has(.lightbox[open]) {
+  overflow: hidden;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* EasyNode: the landing page large, the marketplace smaller beside it */
+@media (min-width: 40rem) {
+  .work__item--duo .work__media {
+    grid-template-columns: 5fr 3fr;
+  }
 }
 
 @media (min-width: 62rem) {
@@ -640,41 +772,27 @@ a:hover {
     margin-top: 0.4rem;
   }
 
-  .work__list {
+  .work__list,
+  .work__item {
+    display: grid;
     grid-template-columns: subgrid;
-    row-gap: clamp(3rem, 6vw, 6rem);
   }
 
-  .work__list li:nth-child(even) {
-    margin-left: 0;
+  .work__item {
+    grid-column: 1 / -1;
+    gap: 0 var(--gap);
+    align-items: start;
   }
 
-  .work__list li:nth-child(1) {
-    grid-column: 1 / 8;
+  .work__text {
+    grid-column: 1 / 5;
+    position: sticky;
+    top: 2rem;
   }
 
-  .work__list li:nth-child(2) {
-    grid-column: 9 / -1;
-    margin-top: 22%;
-  }
-
-  .work__list li:nth-child(3) {
-    grid-column: 2 / 6;
-  }
-
-  .work__list li:nth-child(4) {
+  .work__media {
     grid-column: 7 / -1;
-    margin-top: 12%;
-  }
-
-  .work__list li:nth-child(5) {
-    grid-column: 1 / 7;
-    margin-top: 6%;
-  }
-
-  .work__list li:nth-child(6) {
-    grid-column: 8 / 12;
-    margin-top: 24%;
+    padding-top: 0.5rem;
   }
 }
 
@@ -1160,8 +1278,12 @@ a:hover {
 
   .weight__page,
   .meter__tip,
-  .work__list img {
+  .work__zoom img {
     transition: none;
+  }
+
+  .lightbox[open] {
+    animation: none;
   }
 }
 
