@@ -429,6 +429,20 @@ a:hover {
   color: var(--on-accent);
 }
 
+/* Dark mode: light letters on the green would not read, the words turn green instead */
+@media (prefers-color-scheme: dark) {
+  .cta {
+    color: var(--accent);
+    text-decoration-thickness: 0.1em;
+    text-underline-offset: 0.25em;
+  }
+
+  .cta:hover {
+    color: var(--on-accent);
+    text-decoration-color: var(--on-accent);
+  }
+}
+
 /* Services: a list of names at poster size, the detail in the margin */
 
 .services {
