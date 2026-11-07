@@ -338,6 +338,26 @@ a:hover {
   }
 }
 
+/* Phones: short lines, flush left and set large; only the last one keeps to the right */
+@media (max-width: 47.99rem) {
+  .hero__title {
+    font-size: clamp(2.1rem, 11.5vw, 3.4rem);
+    line-height: 0.95;
+  }
+
+  .hero__title > span {
+    padding-left: 0;
+  }
+
+  .hero__title > span:last-child {
+    text-align: right;
+  }
+
+  .hero__break {
+    display: block;
+  }
+}
+
 /* In the headline only: the serif draws, the mono codes */
 .voice-design {
   font-family: var(--serif);
