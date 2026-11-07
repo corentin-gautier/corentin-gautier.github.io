@@ -655,7 +655,7 @@ a:hover {
 
   .work__list li:nth-child(2) {
     grid-column: 9 / -1;
-    margin-top: 40%;
+    margin-top: 22%;
   }
 
   .work__list li:nth-child(3) {
@@ -664,17 +664,17 @@ a:hover {
 
   .work__list li:nth-child(4) {
     grid-column: 7 / -1;
-    margin-top: 18%;
+    margin-top: 12%;
   }
 
   .work__list li:nth-child(5) {
     grid-column: 1 / 7;
-    margin-top: 10%;
+    margin-top: 6%;
   }
 
   .work__list li:nth-child(6) {
     grid-column: 8 / 12;
-    margin-top: 45%;
+    margin-top: 24%;
   }
 }
 
@@ -813,12 +813,15 @@ a:hover {
 }
 
 .method__story sup {
-  margin-left: 0.08em;
+  position: relative;
+  top: -0.25em;
+  margin-inline: 0.04em -0.14em;
   color: var(--accent-text);
-  font-size: 0.4em;
+  font-size: 0.42em;
   font-weight: 700;
+  letter-spacing: 0;
   line-height: 0;
-  vertical-align: 1.3em;
+  vertical-align: super;
 }
 
 .method__notes {
@@ -937,14 +940,14 @@ a:hover {
   }
 
   .career__portrait {
-    grid-column: 10 / 12;
+    grid-column: 11 / -1;
     grid-row: 1 / span 2;
     width: auto;
     margin-top: 0;
   }
 
   .career__intro {
-    grid-column: 6 / 9;
+    grid-column: 6 / 10;
     grid-row: 1 / span 2;
     margin-top: 0.4rem;
   }
