@@ -54,6 +54,9 @@
 		.toggle input:checked { background: var(--accent); border-color: var(--accent); }
 		.toggle input:checked::after { transform: translateX(14px); background: var(--on-accent); }
 		.url { padding: 10px; border: 1px solid var(--line); font: 12px/1.5 var(--mono); color: var(--muted); overflow-wrap: anywhere; }
+		.alert-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+		.alert-buttons button { padding: 7px 10px; border: 1px solid var(--line); background: none; color: var(--ink); font: 600 13px var(--sans); cursor: pointer; }
+		.alert-buttons button:hover { border-color: var(--accent); color: var(--accent); }
 		.copy { align-self: flex-start; padding: 7px 12px; border: 1px solid var(--accent); background: none; color: var(--accent); font: 600 13px var(--sans); cursor: pointer; }
 		.copy:hover { background: var(--accent); color: var(--on-accent); }
 
@@ -91,6 +94,17 @@
 				<label class="toggle">Chat <input type="checkbox" data-flag="chat" data-off="0" checked></label>
 				<label class="toggle">Thème clair <input type="checkbox" data-flag="theme" data-on="light"></label>
 				<label class="toggle">English <input type="checkbox" data-flag="lang" data-on="en"></label>
+			</fieldset>
+			<fieldset>
+				<legend>Tester les alertes</legend>
+				<div class="alert-buttons">
+					<button type="button" data-alert="follow">Follow</button>
+					<button type="button" data-alert="sub">Abonnement</button>
+					<button type="button" data-alert="resub">Réabonnement</button>
+					<button type="button" data-alert="gifts">Abos offerts</button>
+					<button type="button" data-alert="raid">Raid</button>
+					<button type="button" data-alert="bits">Bits</button>
+				</div>
 			</fieldset>
 			<fieldset>
 				<legend>URL pour OBS</legend>
@@ -176,6 +190,16 @@
 				setTimeout(() => { event.target.textContent = "Copier"; }, 1500);
 			} catch {}
 		});
+
+		// Test alerts go straight to the preview, which listens for them as it does for the dock's
+		for (const button of document.querySelectorAll("[data-alert]")) {
+			button.addEventListener("click", () => {
+				const alert = { kind: button.dataset.alert, name: "pixel_louis" };
+				if (alert.kind === "resub") alert.text = "Toujours là pour les lives du jeudi !";
+				const view = frame.contentWindow;
+				view?.dispatchEvent(new view.CustomEvent("overlay-alert", { detail: alert }));
+			});
+		}
 
 		// The 1920×1080 overlay, scaled to the canvas
 		new ResizeObserver(([entry]) => { frame.style.transform = `scale(${entry.contentRect.width / 1920})`; }).observe(canvas);

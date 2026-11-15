@@ -1,0 +1,319 @@
+<!doctype html>
+<!--
+The overlay's controls, as an OBS dock: Docks → Custom Browser Docks, with this file's URL and the WebSocket
+password after a # (file:///…/stream/dock.html#ws=PASSWORD). The settings are kept in OBS (the profile's
+persistent data, slot "overlay") and sent live to the overlays whose URL carries the same password.
+-->
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Overlay</title>
+	<style>
+		:root {
+			--paper: #0e0f0c;
+			--ink: #eeefe6;
+			--muted: #a4a798;
+			--line: #3a3d33;
+			--accent: #c8f031;
+			--on-accent: #111210;
+			--sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+			--serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+			--mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+			color-scheme: dark;
+		}
+		*, *::before, *::after { box-sizing: border-box; }
+		body { margin: 0; padding: 14px 14px 24px; background: var(--paper); color: var(--ink); font: 13px/1.4 var(--sans); }
+		[hidden] { display: none !important; }
+
+		.head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+		h1 { margin: 0; font: italic 400 20px/1 var(--serif); letter-spacing: -0.02em; }
+		.status { display: inline-flex; align-items: center; gap: 6px; font: 11px var(--mono); color: var(--muted); }
+		.status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #e5484d; }
+		.status.is-on::before { background: var(--accent); }
+
+		section { display: flex; flex-direction: column; gap: 8px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+		h2 { margin: 0 0 2px; font: 11px var(--mono); color: var(--muted); font-weight: 400; }
+		label { display: flex; flex-direction: column; gap: 4px; }
+		.row { display: flex; gap: 6px; align-items: end; }
+		.row > * { flex: 1; min-width: 0; }
+		.row > button { flex: none; }
+		input[type="text"], input[type="number"], input[type="time"], input[type="password"], textarea {
+			width: 100%; padding: 6px 8px; border: 1px solid var(--line); background: #15170f; color: var(--ink); font: 13px var(--sans);
+		}
+		textarea { resize: vertical; min-height: 52px; font: 12px/1.4 var(--mono); }
+		input:focus-visible, textarea:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+		button { padding: 6px 10px; border: 1px solid var(--line); background: none; color: var(--ink); font: 600 12px var(--sans); cursor: pointer; }
+		button:hover { border-color: var(--accent); color: var(--accent); }
+		button.primary { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+		button.primary:hover { background: none; color: var(--accent); }
+		.hint { margin: 0; font: 11px/1.4 var(--mono); color: var(--muted); }
+		.countdown { font: 600 13px var(--mono); color: var(--accent); }
+
+		.toggles { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; }
+		.toggle { flex-direction: row; align-items: center; justify-content: space-between; cursor: pointer; }
+		.toggle input { appearance: none; width: 28px; height: 16px; margin: 0; border: 1px solid var(--line); border-radius: 8px; position: relative; cursor: pointer; flex: none; }
+		.toggle input::after { content: ""; position: absolute; top: 2px; left: 2px; width: 10px; height: 10px; border-radius: 50%; background: var(--muted); transition: transform 0.15s; }
+		.toggle input:checked { background: var(--accent); border-color: var(--accent); }
+		.toggle input:checked::after { transform: translateX(12px); background: var(--on-accent); }
+
+		.alerts { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+		details summary { cursor: pointer; font: 11px var(--mono); color: var(--muted); }
+		details[open] summary { margin-bottom: 8px; }
+	</style>
+</head>
+<body>
+	<div class="head">
+		<h1>Overlay</h1>
+		<span class="status" id="status">hors ligne</span>
+	</div>
+
+	<form id="login" hidden>
+		<section>
+			<h2>Connexion à OBS</h2>
+			<label>Mot de passe du serveur WebSocket <input type="password" id="password" autocomplete="off"></label>
+			<p class="hint">Outils → Paramètres du serveur WebSocket → Afficher les infos de connexion.</p>
+			<button class="primary" type="submit">Se connecter</button>
+		</section>
+	</form>
+
+	<div id="controls">
+		<section>
+			<h2>En ce moment</h2>
+			<label>Sujet <input type="text" data-key="topic" placeholder="Un thème WordPress"></label>
+			<label>Prochain live <input type="text" data-key="next" placeholder="Jeudi, 20 h"></label>
+		</section>
+
+		<section>
+			<h2>Début du live</h2>
+			<div class="row">
+				<label>Dans (min) <input type="number" id="minutes" min="1" value="5"></label>
+				<button type="button" id="start-in">Lancer</button>
+			</div>
+			<div class="row">
+				<label>À <input type="time" id="time" value="20:30"></label>
+				<button type="button" id="start-at">Lancer</button>
+			</div>
+			<div class="row">
+				<span class="countdown" id="countdown">Pas de compte à rebours</span>
+				<button type="button" id="stop">Arrêter</button>
+			</div>
+		</section>
+
+		<section>
+			<h2>Objectif</h2>
+			<label>Libellé <input type="text" data-key="goal" placeholder="Abonnés"></label>
+			<div class="row">
+				<button type="button" data-step="-1">−1</button>
+				<label>Actuel <input type="number" min="0" data-key="goal_now"></label>
+				<label>Cible <input type="number" min="0" data-key="goal_max"></label>
+				<button type="button" data-step="1">+1</button>
+			</div>
+		</section>
+
+		<section>
+			<h2>Affichage</h2>
+			<div class="toggles">
+				<label class="toggle">Webcam <input type="checkbox" data-key="cam" data-off="0" checked></label>
+				<label class="toggle">Chat <input type="checkbox" data-key="chat" data-off="0" checked></label>
+				<label class="toggle">Musique <input type="checkbox" data-key="music" data-off="0" checked></label>
+				<label class="toggle">Démo <input type="checkbox" data-key="demo" data-on="1"></label>
+				<label class="toggle">Thème clair <input type="checkbox" data-key="theme" data-on="light"></label>
+				<label class="toggle">English <input type="checkbox" data-key="lang" data-on="en"></label>
+			</div>
+		</section>
+
+		<section>
+			<h2>Tester les alertes</h2>
+			<label>Pseudo <input type="text" id="alert-name" value="pixel_louis"></label>
+			<div class="alerts">
+				<button type="button" data-alert="follow">Follow</button>
+				<button type="button" data-alert="sub">Abonnement</button>
+				<button type="button" data-alert="resub">Réabonnement</button>
+				<button type="button" data-alert="gifts">Abos offerts</button>
+				<button type="button" data-alert="raid">Raid</button>
+				<button type="button" data-alert="bits">Bits</button>
+			</div>
+		</section>
+
+		<section>
+			<details>
+				<summary>Plus de réglages</summary>
+				<div style="display: flex; flex-direction: column; gap: 8px">
+					<label>Nom à côté du logo <input type="text" data-key="name" placeholder="la chaîne"></label>
+					<label>Liens (Libellé:valeur, un par ligne) <textarea data-key="links" data-lines placeholder="YouTube:@medianmusic"></textarea></label>
+					<label>Infos du bandeau (une par ligne) <textarea data-key="info" data-lines placeholder="les liens"></textarea></label>
+					<label>Titre des écrans plein cadre <textarea data-key="title" data-lines placeholder="Le live&#10;_commence_&#10;dans *{t}*."></textarea></label>
+					<p class="hint">*surligné* · _serif_ · `mono` · {t} le compte à rebours. Vide : le texte par défaut.</p>
+				</div>
+			</details>
+		</section>
+	</div>
+
+	<script>
+		const SLOT = { realm: "OBS_WEBSOCKET_DATA_REALM_PROFILE", slotName: "overlay" };
+		const $ = (selector) => document.querySelector(selector);
+		const fields = [...document.querySelectorAll("[data-key]")];
+		const status = $("#status");
+		let settings = {};
+		let socket;
+		let ready = false;
+		const waiting = new Map();
+		let requestId = 0;
+
+		// The password comes after # in the dock's URL, or from the form, remembered by this dock
+		const store = {
+			get() { try { return localStorage.getItem("obs-ws") || ""; } catch { return ""; } },
+			set(value) { try { localStorage.setItem("obs-ws", value); } catch {} },
+		};
+		const password = new URLSearchParams(location.hash.slice(1)).get("ws") || store.get();
+
+		const sha = async (text) => btoa(String.fromCharCode(...new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)))));
+
+		function call(requestType, requestData = {}) {
+			return new Promise((resolve) => {
+				const id = String(++requestId);
+				waiting.set(id, resolve);
+				socket.send(JSON.stringify({ op: 6, d: { requestType, requestId: id, requestData } }));
+			});
+		}
+
+		// Each connection gets a number: a socket replaced by a new login stops retrying
+		let generation = 0;
+
+		function connect(pass) {
+			const current = ++generation;
+			socket = new WebSocket("ws://localhost:4455");
+			socket.onmessage = async ({ data }) => {
+				const { op, d } = JSON.parse(data);
+				if (op === 0) {
+					const identify = { rpcVersion: 1, eventSubscriptions: 0 };
+					if (d.authentication) identify.authentication = await sha(await sha(pass + d.authentication.salt) + d.authentication.challenge);
+					socket.send(JSON.stringify({ op: 1, d: identify }));
+				}
+				if (op === 2) {
+					store.set(pass);
+					ready = true;
+					status.textContent = "connecté";
+					status.classList.add("is-on");
+					$("#login").hidden = true;
+					$("#controls").hidden = false;
+					const { slotValue } = await call("GetPersistentData", SLOT);
+					settings = slotValue || {};
+					fill();
+				}
+				if (op === 7) {
+					waiting.get(d.requestId)?.(d.responseData || {});
+					waiting.delete(d.requestId);
+				}
+			};
+			socket.onclose = (event) => {
+				if (current !== generation) return;
+				ready = false;
+				status.classList.remove("is-on");
+				// 4009: wrong password; anything else, OBS closed or restarting: try again
+				if (event.code === 4009) {
+					status.textContent = "mauvais mot de passe";
+					$("#login").hidden = false;
+					$("#controls").hidden = true;
+					return;
+				}
+				status.textContent = "hors ligne";
+				setTimeout(() => connect(pass), 3000);
+			};
+		}
+
+		// --- Settings: kept in OBS, then sent to the overlays ---------------------------------------
+		function fill() {
+			for (const field of fields) {
+				const value = settings[field.dataset.key] ?? "";
+				if (field.type === "checkbox") field.checked = field.dataset.on ? value === field.dataset.on : value !== field.dataset.off;
+				else field.value = "lines" in field.dataset ? String(value).split("|").join("\n") : value;
+			}
+			showCountdown();
+		}
+
+		function read(field) {
+			if (field.type === "checkbox") return field.checked ? (field.dataset.on || "") : (field.dataset.off || "");
+			const value = field.value.trim();
+			return "lines" in field.dataset ? value.split("\n").map(line => line.trim()).filter(Boolean).join("|") : value;
+		}
+
+		async function save() {
+			if (!ready) return;
+			await call("SetPersistentData", { ...SLOT, slotValue: settings });
+			await call("BroadcastCustomEvent", { eventData: { overlay: "settings", settings } });
+		}
+
+		let typing;
+		for (const field of fields) {
+			field.addEventListener("input", () => {
+				settings[field.dataset.key] = read(field);
+				clearTimeout(typing);
+				typing = setTimeout(save, field.type === "checkbox" ? 0 : 500);
+			});
+		}
+
+		for (const button of document.querySelectorAll("[data-step]")) {
+			button.addEventListener("click", () => {
+				const field = $('[data-key="goal_now"]');
+				field.value = Math.max(0, (Number(field.value) || 0) + Number(button.dataset.step));
+				settings.goal_now = field.value;
+				save();
+			});
+		}
+
+		// --- Countdown: a fixed moment, so a reload of the overlay keeps it ------------------------
+		function startCountdown(at) {
+			settings.at = String(at);
+			settings.at_from = String(Date.now());
+			showCountdown();
+			save();
+		}
+		$("#start-in").addEventListener("click", () => startCountdown(Date.now() + (Number($("#minutes").value) || 5) * 60000));
+		$("#start-at").addEventListener("click", () => {
+			const [hours, minutes] = $("#time").value.split(":").map(Number);
+			const at = new Date();
+			at.setHours(hours, minutes, 0, 0);
+			if (at.getTime() < Date.now()) at.setDate(at.getDate() + 1);
+			startCountdown(at.getTime());
+		});
+		$("#stop").addEventListener("click", () => {
+			settings.at = "";
+			settings.at_from = "";
+			showCountdown();
+			save();
+		});
+
+		function showCountdown() {
+			const at = Number(settings.at);
+			const text = $("#countdown");
+			if (!at) return void (text.textContent = "Pas de compte à rebours");
+			const left = Math.max(0, Math.ceil((at - Date.now()) / 1000));
+			const time = new Date(at).toLocaleTimeString("fr", { hour: "2-digit", minute: "2-digit" });
+			text.textContent = left ? `${time} · ${Math.floor(left / 60)}:${String(left % 60).padStart(2, "0")}` : `${time} · c'est l'heure`;
+		}
+		setInterval(showCountdown, 1000);
+
+		// --- Test alerts -----------------------------------------------------------------------------
+		for (const button of document.querySelectorAll("[data-alert]")) {
+			button.addEventListener("click", () => {
+				if (!ready) return;
+				const alert = { kind: button.dataset.alert, name: $("#alert-name").value.trim() || "pixel_louis" };
+				if (alert.kind === "resub") alert.text = "Toujours là pour les lives du jeudi !";
+				if (alert.kind === "bits") alert.text = "Cheer500 trop bien ce live";
+				call("BroadcastCustomEvent", { eventData: { overlay: "alert", alert } });
+			});
+		}
+
+		$("#login").addEventListener("submit", (event) => {
+			event.preventDefault();
+			socket?.close();
+			connect($("#password").value);
+		});
+
+		if (password) connect(password);
+		else { $("#login").hidden = false; $("#controls").hidden = true; }
+	</script>
+</body>
+</html>

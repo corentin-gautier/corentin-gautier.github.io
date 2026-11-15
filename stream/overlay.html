@@ -29,8 +29,8 @@ Settings:
     topic     what is shown now ("Un thème WordPress")
     next      the next stream, on the full screens ("Jeudi, 20 h")
     in        start screen: countdown in minutes (10)
-    at        start screen: countdown to a time of day (20:30)
-    since     the time the stream started, for the uptime (20:30); the page's load time otherwise
+    at        start screen: countdown to a time of day (20:30) or a timestamp in milliseconds
+    since     the time the stream started, for the uptime (20:30 or a timestamp); else OBS's, else the page's load
     title     the full screen's title: lines split by |, *marked*, _serif_, `mono`, {t} the countdown
     info      the strip's rotating lines, split by | (default: the links' values)
     goal      a goal's label, with goal_now and goal_max ("Abonnés", 12, 50)
@@ -42,6 +42,9 @@ Settings:
     hide      chat users never shown, split by commas (default: the usual bots); commands starting with ! are hidden
     theme     dark (default) or light
     lang      fr (default) or en
+    ws        the password of OBS's WebSocket server: the overlay then takes the settings kept in OBS by
+              dock.html (they win over the URL's), follows them live, plays its test alerts, and counts the
+              uptime from the stream's own start
     demo      1 plays fake messages and alerts, to set the scenes up
     preview   1 draws a fake capture in the holes, to look at the overlay in a browser
 -->
@@ -370,8 +373,57 @@ Settings:
 		<div class="alerts" id="alerts"></div>
 	</div>
 
-	<script>
-		const params = new URLSearchParams(location.search);
+	<script type="module">
+		// --- OBS: the settings dock.html keeps there, its live changes and test alerts, the stream's start ---
+		// Without a password (or OBS), the URL alone decides, as in a plain browser.
+		const LIVE_KEYS = ["topic", "goal", "goal_now", "goal_max"];
+		const obs = await connectObs(new URLSearchParams(location.search).get("ws"));
+
+		function connectObs(password) {
+			const empty = { settings: {}, streamStart: null };
+			if (!password) return Promise.resolve(empty);
+			return new Promise((resolve) => {
+				const sha = async (text) => btoa(String.fromCharCode(...new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)))));
+				const result = { ...empty };
+				const timer = setTimeout(() => resolve(result), 1500);
+				let socket;
+				try { socket = new WebSocket("ws://localhost:4455"); } catch { return resolve(empty); }
+				socket.onerror = () => { clearTimeout(timer); resolve(result); };
+				socket.onmessage = async ({ data }) => {
+					const { op, d } = JSON.parse(data);
+					if (op === 0) {
+						const identify = { rpcVersion: 1, eventSubscriptions: 1 | 64 };
+						if (d.authentication) identify.authentication = await sha(await sha(password + d.authentication.salt) + d.authentication.challenge);
+						socket.send(JSON.stringify({ op: 1, d: identify }));
+					}
+					if (op === 2) {
+						const send = (requestType, requestData, requestId) => socket.send(JSON.stringify({ op: 6, d: { requestType, requestId, requestData } }));
+						send("GetStreamStatus", {}, "stream");
+						send("GetPersistentData", { realm: "OBS_WEBSOCKET_DATA_REALM_PROFILE", slotName: "overlay" }, "settings");
+					}
+					if (op === 7 && d.requestId === "stream" && d.responseData?.outputActive) result.streamStart = Date.now() - d.responseData.outputDuration;
+					if (op === 7 && d.requestId === "settings") {
+						result.settings = d.responseData?.slotValue || {};
+						clearTimeout(timer);
+						resolve(result);
+					}
+					if (op === 5) window.dispatchEvent(new CustomEvent("obs-event", { detail: d }));
+				};
+			});
+		}
+
+		// The URL's settings, under the ones kept in OBS; an empty value there removes the URL's
+		function merged(settings) {
+			const out = new URLSearchParams(location.search);
+			for (const [key, value] of Object.entries(settings || {})) {
+				if (key === "scene" || key === "ws") continue;
+				if (value == null || value === "") out.delete(key);
+				else out.set(key, String(value));
+			}
+			return out;
+		}
+
+		const params = merged(obs.settings);
 		const lang = params.get("lang") === "en" ? "en" : "fr";
 		const scene = ["game", "chat", "full", "start", "pause", "end"].includes(params.get("scene")) ? params.get("scene") : "game";
 		const full = ["start", "pause", "end"].includes(scene);
@@ -391,7 +443,7 @@ Settings:
 				months: n => `${n} mois d'affilée`, tier: { Prime: "avec Prime", 1000: "niveau 1", 2000: "niveau 2", 3000: "niveau 3" },
 				sub: "Nouvel abonnement", resub: "Réabonnement", gift: "Abonnement offert", gifts: n => `${n} abonnements offerts`,
 				to: name => `à ${name}`, community: "à la communauté", raid: "Raid", raiders: n => `avec ${n} personne${n > 1 ? "s" : ""}`,
-				bits: n => `${n} bits`, follow: "Nouveau follow", welcome: "Bienvenue !", soonText: "dans quelques secondes",
+				bits: n => `${n} bits`, follow: "Nouveau follow", welcome: "Bienvenue !", soonText: "maintenant ...",
 				titles: {
 					start: ["Le live", "_commence_", "dans *{t}*."],
 					startNoTime: ["Le live", "_va bientôt_", "*commencer*."],
@@ -426,17 +478,18 @@ Settings:
 		const pad = n => String(n).padStart(2, "0");
 
 		// --- Texts ----------------------------------------------------------------------------------
-		const topic = params.get("topic") || "";
-		const goal = params.get("goal") || "";
 		const texts = {
 			...words,
-			topic,
-			goal,
 			channel: channel ? `twitch.tv/${channel}` : "",
 			state: { start: words.soon, pause: words.away, end: words.over }[scene],
 		};
-		for (const node of $$("[data-text]")) node.textContent = texts[node.dataset.text];
-		for (const node of $$("[data-topic]")) node.hidden = !topic;
+		for (const node of $$("[data-text]")) if (node.dataset.text in texts) node.textContent = texts[node.dataset.text];
+
+		function showTopic(topic) {
+			for (const node of $$('[data-text="topic"]')) node.textContent = topic;
+			for (const node of $$("[data-topic]")) node.hidden = !topic;
+			if (full) showFacts();
+		}
 
 		const mark = `<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M16 48V36a20 20 0 0 1 20-20h12v12a20 20 0 0 1-20 20zl18-18" fill="none" stroke="currentColor" stroke-width="5"/><circle cx="35" cy="29" r="5" fill="currentColor"/></svg>`;
 		for (const node of $$("[data-wordmark]")) {
@@ -475,11 +528,16 @@ Settings:
 		}
 
 		// The goal: a label, a count and a bar
-		const goalNow = Number(params.get("goal_now")) || 0;
-		const goalMax = Number(params.get("goal_max")) || 0;
-		$("[data-goal]").hidden = !goal || !goalMax;
-		$("[data-goal-count]").textContent = `${goalNow} / ${goalMax}`;
-		setTimeout(() => { $("[data-goal-bar]").style.width = `${Math.min(100, (goalNow / goalMax) * 100)}%`; }, 300);
+		function showGoal() {
+			const goal = params.get("goal") || "";
+			const goalNow = Number(params.get("goal_now")) || 0;
+			const goalMax = Number(params.get("goal_max")) || 0;
+			$("[data-goal]").hidden = !goal || !goalMax;
+			$('[data-text="goal"]').textContent = goal;
+			$("[data-goal-count]").textContent = `${goalNow} / ${goalMax}`;
+			setTimeout(() => { $("[data-goal-bar]").style.width = `${goalMax ? Math.min(100, (goalNow / goalMax) * 100) : 0}%`; }, 300);
+		}
+		showGoal();
 
 		// --- Layout ---------------------------------------------------------------------------------
 		const stage = $("#stage");
@@ -526,13 +584,14 @@ Settings:
 		if (scene === "start") {
 			if (params.get("in")) deadline = Date.now() + Number(params.get("in")) * 60000;
 			const at = (params.get("at") || "").match(/^(\d{1,2})[:h](\d{2})$/);
-			if (at) {
+			if (/^\d{12,}$/.test(params.get("at") || "")) deadline = Number(params.get("at"));
+			else if (at) {
 				const day = new Date();
 				day.setHours(Number(at[1]), Number(at[2]), 0, 0);
 				deadline = day.getTime();
 			}
 		}
-		const countdownFrom = Date.now();
+		const countdownFrom = deadline && params.get("at_from") ? Number(params.get("at_from")) : Date.now();
 
 		// Escaped first, then *marked*, _serif_, `mono` and {t}: what the URL brings never becomes markup
 		function richText(text) {
@@ -559,19 +618,25 @@ Settings:
 			// Narrower with the chat beside it; three lines fit at this size either way
 			headline.style.setProperty("--size", withChat ? "150px" : "200px");
 
-			const facts = $("#facts");
-			const fact = (term, value) => { if (value) facts.append(el("dt", "", term), el("dd", "", value)); };
-			fact(words.program, topic);
-			fact(words.next, params.get("next"));
-			facts.hidden = !facts.children.length;
 
 			$("#screen-dot").classList.toggle("dot--live", scene !== "end");
 			$("#progress").classList.toggle("progress--wait", scene === "start" ? !deadline : scene === "pause");
 			$("#progress").hidden = scene === "end";
 		}
 
+		function showFacts() {
+			const facts = $("#facts");
+			facts.replaceChildren();
+			const fact = (term, value) => { if (value) facts.append(el("dt", "", term), el("dd", "", value)); };
+			fact(words.program, params.get("topic"));
+			fact(words.next, params.get("next"));
+			facts.hidden = !facts.children.length;
+		}
+		showTopic(params.get("topic") || "");
+
 		// --- Clocks ---------------------------------------------------------------------------------
-		let since = Date.now();
+		let since = obs.streamStart ?? Date.now();
+		if (/^\d{12,}$/.test(params.get("since") || "")) since = Number(params.get("since"));
 		const sinceParam = (params.get("since") || "").match(/^(\d{1,2})[:h](\d{2})$/);
 		if (sinceParam) {
 			const start = new Date();
@@ -686,6 +751,37 @@ Settings:
 			setTimeout(() => box.classList.add("is-leaving"), 6500);
 			setTimeout(() => { box.remove(); setTimeout(nextAlert, 400); }, 7000);
 		}
+
+		// --- Test alerts, from the dock (through OBS) or the studio (straight to the page) -----------
+		function testAlert({ kind, name = "pixel_louis", count, months, recipient, text }) {
+			const message = text ? { text } : null;
+			const alert = {
+				follow: { label: words.follow, name, detail: words.welcome },
+				sub: { label: words.sub, name, detail: words.tier[1000] },
+				resub: { label: words.resub, name, detail: words.months(months || 12), message },
+				gift: { label: words.gift, name, detail: words.to(recipient || "pixel_louis") },
+				gifts: { label: words.gifts(count || 5), name, detail: words.community },
+				raid: { label: words.raid, name, detail: words.raiders(count || 42) },
+				bits: { label: words.bits(count || 500), name, message },
+			}[kind];
+			if (alert) alertFor(alert);
+		}
+		addEventListener("overlay-alert", (event) => testAlert(event.detail || {}));
+
+		// Settings: the topic and the goal change in place, anything else loads the page again
+		addEventListener("obs-event", ({ detail: { eventType, eventData } }) => {
+			if (eventType === "StreamStateChanged" && eventData.outputState === "OBS_WEBSOCKET_OUTPUT_STARTED") since = Date.now();
+			if (eventType !== "CustomEvent" || !eventData) return;
+			if (eventData.overlay === "alert") testAlert(eventData.alert || {});
+			if (eventData.overlay === "settings") {
+				const next = merged(eventData.settings);
+				const keys = new Set([...params.keys(), ...next.keys()]);
+				if ([...keys].some(key => !LIVE_KEYS.includes(key) && params.get(key) !== next.get(key))) return location.reload();
+				for (const key of LIVE_KEYS) next.has(key) ? params.set(key, next.get(key)) : params.delete(key);
+				showTopic(params.get("topic") || "");
+				showGoal();
+			}
+		});
 
 		// --- Twitch, read anonymously over IRC ------------------------------------------------------
 		function parseLine(line) {
