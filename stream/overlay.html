@@ -17,21 +17,28 @@ Scenes (scene=…):
     start   full screen "the stream starts soon", with a countdown when `in` or `at` is given.
     pause   full screen "be right back".
     end     full screen "that's it for today".
+    full    the game in full screen: nothing but a badge in a corner (the name, live, the uptime and the topic),
+            crop marks around the webcam (384×216 at x 1504, y 832; cam=0 hides them) and the alerts.
 
 Settings:
     channel   Twitch channel: shows its chat and plays alerts for subs, gifts, raids and bits (read anonymously,
               nothing to log into; follows need an authenticated API and are not read)
+    name      the name beside the logo (default: the channel)
+    links     the profiles listed, label:value split by | ("YouTube:@medianmusic|Discord:discord.gg/x");
+              default: the Twitch channel
     topic     what is shown now ("Un thème WordPress")
     next      the next stream, on the full screens ("Jeudi, 20 h")
     in        start screen: countdown in minutes (10)
     at        start screen: countdown to a time of day (20:30)
     since     the time the stream started, for the uptime (20:30); the page's load time otherwise
     title     the full screen's title: lines split by |, *marked*, _serif_, `mono`, {t} the countdown
-    info      the strip's rotating lines, split by | (default: the site and the profiles)
+    info      the strip's rotating lines, split by | (default: the links' values)
     goal      a goal's label, with goal_now and goal_max ("Abonnés", 12, 50)
-    cam       0 hides the small webcam hole of the game scene
+    cam       0 hides the small webcam hole of the game scene, and the webcam's marks in full
     ratio     16:9 gives the game scene a 16:9 hole (1440×810) instead of 16:10
     chat      0 hides the chat even with a channel
+    music     0 hides what Spotify plays (written by now-playing.sh, see install-now-playing.sh)
+    corner    full scene: where the badge sits, tl (default), tr or bl
     hide      chat users never shown, split by commas (default: the usual bots); commands starting with ! are hidden
     theme     dark (default) or light
     lang      fr (default) or en
@@ -42,7 +49,7 @@ Settings:
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Overlay — Corentin Gautier</title>
+	<title>Stream overlay</title>
 	<style>
 		/* The colours of assets/css/style.css, dark by default: the stream is watched at night */
 		:root {
@@ -219,6 +226,38 @@ Settings:
 		.alert__detail { font: italic 400 34px/1.15 var(--serif); letter-spacing: -0.02em; }
 		.alert__message { margin-top: 6px; font-size: 24px; line-height: 1.3; max-width: 1000px; }
 
+		/* --- What Spotify plays: the cover, the title and the artist, little bars dancing in lime ----- */
+		.music { display: flex; gap: 16px; align-items: center; padding-top: 16px; border-top: 1px solid var(--line); }
+		.music__art { width: 72px; height: 72px; object-fit: cover; flex: none; outline: 1px solid var(--line); }
+		.music__text { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+		.music .label { display: flex; align-items: center; gap: 10px; font-size: 17px; }
+		.music__title, .music__artist { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+		.music__title { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; }
+		.music__artist { font-size: 19px; color: var(--muted); line-height: 1.2; }
+		.eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 13px; }
+		.eq i { width: 3px; height: 100%; background: var(--accent); transform-origin: bottom; animation: eq 0.9s ease-in-out infinite alternate; }
+		.eq i:nth-child(2) { animation-duration: 0.6s; animation-delay: -0.3s; }
+		.eq i:nth-child(3) { animation-duration: 0.75s; animation-delay: -0.5s; }
+		@keyframes eq { from { transform: scaleY(0.25); } }
+		.badge .music { padding-top: 12px; }
+		.badge .music__art { width: 56px; height: 56px; }
+		.facts .music { padding: 0; border: 0; max-width: 560px; }
+		.facts .music__art { width: 96px; height: 96px; }
+		.facts .music__title { font-size: 26px; }
+		.facts .music__artist { font-size: 22px; }
+
+		/* --- Full screen game: a badge in a corner, marks around the webcam ------------------------ */
+		.badge { position: absolute; display: flex; flex-direction: column; gap: 12px; min-width: 340px; max-width: 640px; padding: 18px 24px 20px 18px; background: color-mix(in srgb, var(--paper) 90%, transparent); outline: 1px solid var(--line); }
+		.badge[data-corner="tl"] { left: 32px; top: 32px; }
+		.badge[data-corner="tr"] { right: 32px; top: 32px; }
+		.badge[data-corner="bl"] { left: 32px; bottom: 32px; }
+		.badge .wordmark { font-size: 26px; gap: 14px; }
+		.badge .wordmark__mark { width: 40px; height: 40px; }
+		.badge .status { margin: 0; padding: 10px 0 0; border-bottom: 0; gap: 24px; font-size: 20px; }
+		.badge .topic p:last-child { font-size: 30px; white-space: normal; }
+		.full-cam { position: absolute; right: 32px; bottom: 32px; width: 384px; height: 216px; }
+		.alerts[data-at="full"] { top: 48px; }
+
 		/* --- Preview: a fake capture under the holes ----------------------------------------------- */
 		body.preview { background:
 			radial-gradient(circle at 30% 40%, #2b6a8f, transparent 50%),
@@ -256,11 +295,19 @@ Settings:
 					<div class="panel-title"><h2 data-text="find"></h2></div>
 					<ul class="links" data-links></ul>
 				</div>
+<div class="music" data-music hidden>
+						<img class="music__art" data-music-art alt="">
+						<div class="music__text">
+							<p class="label"><i class="eq"><i></i><i></i><i></i></i><span data-text="listening"></span></p>
+							<p class="music__title" data-music-title></p>
+							<p class="music__artist" data-music-artist></p>
+						</div>
+					</div>
 				<div class="goal" data-goal>
 					<p class="goal__head"><span data-text="goal"></span><span class="tabular" data-goal-count></span></p>
 					<div class="goal__bar"><div data-goal-bar></div></div>
 				</div>
-				<p class="foot"><span class="label">Bordeaux</span><time class="tabular" data-clock></time></p>
+				<p class="foot"><span class="label" data-date></span><time class="tabular" data-clock></time></p>
 			</div>
 		</div>
 
@@ -279,6 +326,14 @@ Settings:
 					<h1 class="headline" id="headline"></h1>
 					<div class="facts">
 						<dl id="facts"></dl>
+						<div class="music" data-music hidden>
+							<img class="music__art" data-music-art alt="">
+							<div class="music__text">
+								<p class="label"><i class="eq"><i></i><i></i><i></i></i><span data-text="listening"></span></p>
+								<p class="music__title" data-music-title></p>
+								<p class="music__artist" data-music-artist></p>
+							</div>
+						</div>
 						<ul class="links" data-links></ul>
 					</div>
 				</div>
@@ -288,17 +343,42 @@ Settings:
 			</div>
 		</div>
 
+		<!-- The game in full screen -->
+		<div id="full" hidden>
+			<div class="badge" id="badge">
+				<div class="wordmark" data-wordmark></div>
+				<p class="status">
+					<span><i class="dot dot--live"></i><b data-text="live"></b></span>
+					<time class="tabular" data-uptime></time>
+				</p>
+				<div class="topic" data-topic>
+					<p class="label" data-text="now"></p>
+					<p data-text="topic"></p>
+				</div>
+				<div class="music" data-music hidden>
+					<img class="music__art" data-music-art alt="">
+					<div class="music__text">
+						<p class="label"><i class="eq"><i></i><i></i><i></i></i><span data-text="listening"></span></p>
+						<p class="music__title" data-music-title></p>
+						<p class="music__artist" data-music-artist></p>
+					</div>
+				</div>
+			</div>
+			<div class="full-cam hole" data-cam></div>
+		</div>
+
 		<div class="alerts" id="alerts"></div>
 	</div>
 
 	<script>
 		const params = new URLSearchParams(location.search);
 		const lang = params.get("lang") === "en" ? "en" : "fr";
-		const scene = ["game", "chat", "start", "pause", "end"].includes(params.get("scene")) ? params.get("scene") : "game";
+		const scene = ["game", "chat", "full", "start", "pause", "end"].includes(params.get("scene")) ? params.get("scene") : "game";
 		const full = ["start", "pause", "end"].includes(scene);
 		const channel = (params.get("channel") || "").trim().toLowerCase().replace(/^#/, "");
 		const demo = params.get("demo") === "1";
-		const withChat = (channel || demo) && params.get("chat") !== "0";
+		const withChat = (channel || demo) && params.get("chat") !== "0" && scene !== "full";
+		const name = params.get("name") || channel;
 
 		document.documentElement.lang = lang;
 		if (params.get("theme") === "light") document.documentElement.dataset.theme = "light";
@@ -306,7 +386,7 @@ Settings:
 
 		const words = {
 			fr: {
-				now: "En ce moment", live: "En direct", soon: "Bientôt en direct", away: "En pause", over: "Terminé",
+				now: "En ce moment", listening: "En écoute", live: "En direct", soon: "Bientôt en direct", away: "En pause", over: "Terminé",
 				chat: "Le chat", find: "Me retrouver", program: "Au programme", next: "Prochain live",
 				months: n => `${n} mois d'affilée`, tier: { Prime: "avec Prime", 1000: "niveau 1", 2000: "niveau 2", 3000: "niveau 3" },
 				sub: "Nouvel abonnement", resub: "Réabonnement", gift: "Abonnement offert", gifts: n => `${n} abonnements offerts`,
@@ -320,7 +400,7 @@ Settings:
 				},
 			},
 			en: {
-				now: "Now", live: "Live", soon: "Live soon", away: "On a break", over: "Over",
+				now: "Now", listening: "Now playing", live: "Live", soon: "Live soon", away: "On a break", over: "Over",
 				chat: "Chat", find: "Find me", program: "Today", next: "Next stream",
 				months: n => `${n} months in a row`, tier: { Prime: "with Prime", 1000: "tier 1", 2000: "tier 2", 3000: "tier 3" },
 				sub: "New subscriber", resub: "Resubscribed", gift: "Gifted sub", gifts: n => `${n} gifted subs`,
@@ -359,16 +439,17 @@ Settings:
 		for (const node of $$("[data-topic]")) node.hidden = !topic;
 
 		const mark = `<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M16 48V36a20 20 0 0 1 20-20h12v12a20 20 0 0 1-20 20zl18-18" fill="none" stroke="currentColor" stroke-width="5"/><circle cx="35" cy="29" r="5" fill="currentColor"/></svg>`;
-		for (const node of $$("[data-wordmark]")) node.innerHTML = `<span class="wordmark__mark">${mark}</span><span>Corentin Gautier</span>`;
+		for (const node of $$("[data-wordmark]")) {
+			node.innerHTML = `<span class="wordmark__mark">${mark}</span>`;
+			if (name) node.append(el("span", "", name));
+		}
 
 		// The profiles, in the column when there is no chat and at the bottom of the full screens
-		const links = [
-			["Site", "corentingautier.dev"],
-			["GitHub", "corentin-gautier"],
-			["Dribbble", "Median"],
-			...(channel ? [["Twitch", channel]] : []),
-		];
+		const links = params.has("links")
+			? params.get("links").split("|").map(link => link.split(/:(.*)/s).map(part => (part || "").trim())).filter(([label, value]) => label && value)
+			: channel ? [["Twitch", channel]] : [];
 		for (const list of $$("[data-links]")) {
+			list.hidden = !links.length;
 			for (const [name, value] of links) {
 				const li = el("li");
 				li.append(el("span", "", name), el("span", "", value));
@@ -377,7 +458,7 @@ Settings:
 		}
 
 		// The strip's rotating lines
-		const infos = params.has("info") ? params.get("info").split("|").filter(Boolean) : ["corentingautier.dev", "github.com/corentin-gautier", ...(channel ? [`twitch.tv/${channel}`] : [])];
+		const infos = params.has("info") ? params.get("info").split("|").filter(Boolean) : links.map(([label, value]) => label === "Twitch" ? `twitch.tv/${value}` : value);
 		const infoList = $("[data-infos]");
 		for (const line of infos) {
 			const li = el("li");
@@ -407,21 +488,23 @@ Settings:
 		$("#main-hole").dataset.ratio = scene === "chat" || params.get("ratio") === "16:9" ? "16:9" : "16:10";
 		for (const node of $$("[data-cam]")) node.hidden = scene === "chat" || params.get("cam") === "0";
 		$('[data-chat-slot="game"]').hidden = !withChat;
-		$("[data-links-slot]").hidden = withChat;
+		$("[data-links-slot]").hidden = withChat || !links.length;
+		$("#badge").dataset.corner = ["tr", "bl"].includes(params.get("corner")) ? params.get("corner") : "tl";
 		$('[data-chat-slot="screen"]').hidden = !withChat;
-		$("#alerts").dataset.at = full ? "screen" : "game";
+		$("#alerts").dataset.at = full ? "screen" : scene === "full" ? "full" : "game";
 
 		// One chat list, moved into the slot of the scene shown
 		const chat = el("ol", "chat");
-		$(`[data-chat-slot="${full ? "screen" : "game"}"]`).append(chat);
+		if (withChat) $(`[data-chat-slot="${full ? "screen" : "game"}"]`).append(chat);
 
 		function layout() {
 			const scale = innerWidth / 1920;
 			stage.style.height = `${innerHeight / scale}px`;
 			stage.style.transform = `scale(${scale})`;
-			$("#live").hidden = full;
+			$("#live").hidden = full || scene === "full";
 			$("#screen").hidden = !full;
-			if (!full) cutHoles(scale);
+			$("#full").hidden = scene !== "full";
+			if (!$("#live").hidden) cutHoles(scale);
 		}
 
 		// The backdrop covers the stage except where the capture and the webcam show through
@@ -480,6 +563,7 @@ Settings:
 			const fact = (term, value) => { if (value) facts.append(el("dt", "", term), el("dd", "", value)); };
 			fact(words.program, topic);
 			fact(words.next, params.get("next"));
+			facts.hidden = !facts.children.length;
 
 			$("#screen-dot").classList.toggle("dot--live", scene !== "end");
 			$("#progress").classList.toggle("progress--wait", scene === "start" ? !deadline : scene === "pause");
@@ -499,6 +583,7 @@ Settings:
 		function tick() {
 			const now = new Date();
 			for (const node of $$("[data-clock]")) node.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+			for (const node of $$("[data-date]")) node.textContent = now.toLocaleDateString(lang, { weekday: "short", day: "numeric", month: "short" });
 			const up = Math.floor((Date.now() - since) / 1000);
 			for (const node of $$("[data-uptime]")) node.textContent = `${Math.floor(up / 3600)}:${pad(Math.floor(up / 60) % 60)}:${pad(up % 60)}`;
 			if (deadline) {
@@ -508,6 +593,29 @@ Settings:
 				const total = Math.max(1, deadline - countdownFrom);
 				$("#progress div").style.width = `${Math.min(100, ((Date.now() - countdownFrom) / total) * 100)}%`;
 			}
+		}
+
+		// --- Music: now-playing.js, rewritten by now-playing.sh, loaded again every few seconds ------
+		function showMusic() {
+			const track = window.nowPlaying;
+			// Shown while playing, and while the script keeps writing: a stale file means it stopped
+			const on = params.get("music") !== "0" && track?.state === "playing" && Date.now() - track.updated < 20000;
+			for (const block of $$("[data-music]")) {
+				block.hidden = !on;
+				if (!on) continue;
+				$("[data-music-title]", block).textContent = track.title;
+				$("[data-music-artist]", block).textContent = track.artist;
+				const art = $("[data-music-art]", block);
+				art.hidden = !track.art;
+				if (track.art && art.getAttribute("src") !== track.art) art.src = track.art;
+			}
+		}
+
+		function loadMusic() {
+			const script = el("script");
+			script.src = `now-playing.js?${Date.now()}`;
+			script.onload = script.onerror = () => { script.remove(); showMusic(); };
+			document.head.append(script);
 		}
 
 		// --- Chat -----------------------------------------------------------------------------------
@@ -702,6 +810,8 @@ Settings:
 		setInterval(tick, 1000);
 		setInterval(rotateInfo, 7000);
 		if (withChat && channel) connect();
+		if (demo) setInterval(() => { window.nowPlaying = { state: "playing", title: "Midnight City", artist: "M83", updated: Date.now() }; showMusic(); }, 1000);
+		else if (params.get("music") !== "0") { loadMusic(); setInterval(loadMusic, 3000); }
 		if (demo) runDemo();
 	</script>
 </body>

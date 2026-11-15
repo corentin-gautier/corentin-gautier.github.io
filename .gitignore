@@ -1,3 +1,5 @@
 node_modules/
 dist/
 .DS_Store
+stream/now-playing.js
+stream/now-playing.js.tmp
