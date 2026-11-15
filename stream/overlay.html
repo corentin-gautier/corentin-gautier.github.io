@@ -11,7 +11,7 @@ countdown starts again when the scene is shown.
 
 Scenes (scene=…):
     game    default. A 16:10 hole for the screen capture (1440×900 at x 32, y 32, the Mac's screen at 75 % of
-            1920×1200), a column on the right with the webcam (384×216 at x 1504, y 160), the chat and the clock,
+            1920×1200), a column on the right with the webcam (384×216 at x 1504, y 182), the chat and the clock,
             and a strip under the hole with the topic and rotating infos.
     chat    the same frame, with a big 16:9 hole for the webcam (1440×810 at x 32, y 32) and no small one.
     start   full screen "the stream starts soon", with a countdown when `in` or `at` is given.
@@ -123,8 +123,9 @@ Settings:
 		.topic p:last-child { font-size: 44px; font-weight: 700; line-height: 1.05; letter-spacing: -0.045em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 		.main[data-scene="chat"] .topic p:last-child { font-size: 72px; }
 		.infos { position: relative; flex: none; width: 520px; height: 40px; }
-		.infos li { position: absolute; inset: 0; display: flex; align-items: center; justify-content: flex-end; gap: 14px; font: 400 24px/1 var(--mono); color: var(--ink); opacity: 0; transform: translateY(10px); transition: opacity 0.6s, transform 0.6s; white-space: nowrap; }
-		.infos li.is-on { opacity: 1; transform: none; }
+		.infos li { position: absolute; inset: 0; display: flex; align-items: center; justify-content: flex-end; gap: 14px; font: 400 24px/1 var(--mono); color: var(--ink); opacity: 0; transform: translateY(10px); transition: opacity 0.3s, transform 0.3s; white-space: nowrap; }
+		/* The new line comes in once the old one is gone */
+		.infos li.is-on { opacity: 1; transform: none; transition-duration: 0.5s; transition-delay: 0.35s; }
 
 		.column { position: absolute; left: 1504px; top: 32px; bottom: 32px; width: 384px; display: flex; flex-direction: column; gap: 28px; }
 		.column .wordmark { font-size: 27px; }
