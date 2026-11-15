@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
-    <loc>https://corentin-gautier.github.io/sitemap-main.xml</loc>
+    <loc>https://corentingautier.dev/sitemap-main.xml</loc>
   </sitemap>
   <sitemap>
-    <loc>https://corentin-gautier.github.io/snap-carousel/sitemap.xml</loc>
+    <loc>https://corentingautier.dev/snap-carousel/sitemap.xml</loc>
   </sitemap>
   <sitemap>
-    <loc>https://corentin-gautier.github.io/core-blocks-enhancer/sitemap.xml</loc>
+    <loc>https://corentingautier.dev/core-blocks-enhancer/sitemap.xml</loc>
   </sitemap>
   <sitemap>
-    <loc>https://corentin-gautier.github.io/restyle-for-twitch/sitemap.xml</loc>
+    <loc>https://corentingautier.dev/restyle-for-twitch/sitemap.xml</loc>
   </sitemap>
 </sitemapindex>
