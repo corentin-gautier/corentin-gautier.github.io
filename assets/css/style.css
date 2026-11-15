@@ -1176,7 +1176,6 @@ html:has(.lightbox[open]) {
 }
 
 .career__year {
-  color: var(--accent-text);
   font-size: clamp(3.5rem, 10vw, 9rem);
   font-weight: 200;
   line-height: 0.8;
