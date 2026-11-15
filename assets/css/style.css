@@ -1404,6 +1404,42 @@ html:has(.lightbox[open]) {
   }
 }
 
+/* Legal notice: a title, then short blocks read at a comfortable measure */
+
+.legal {
+  row-gap: 2.5rem;
+  padding-block: clamp(4rem, 9vw, 8rem);
+}
+
+.legal__block {
+  display: grid;
+  gap: 0.6rem;
+  max-width: 42rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.legal__block h2 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 62rem) {
+  .legal__title {
+    grid-column: 1 / 5;
+    grid-row: 1 / span 5;
+    align-self: start;
+    position: sticky;
+    top: 7rem;
+  }
+
+  .legal__block {
+    grid-column: 6 / -1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
