@@ -12,7 +12,7 @@ if [[ $1 == --remove ]]; then
 	exit 0
 fi
 
-chmod +x -- $script
+chmod +x "$script"
 cat > $plist <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
