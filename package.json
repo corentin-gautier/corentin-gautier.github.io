@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "node tools/serve.mjs",
     "build": "node tools/build.mjs",
-    "preview": "node tools/serve.mjs --build"
+    "preview": "node tools/serve.mjs --build",
+    "stream": "node stream/serve.mjs"
   },
   "devDependencies": {
     "esbuild": "^0.28.2",
