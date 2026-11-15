@@ -3,6 +3,7 @@ import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { transform } from 'esbuild';
 import { minify } from 'html-minifier-terser';
+import { REDIRECTS, redirectPage } from './redirects.mjs';
 
 export const ROOT = fileURLToPath(new URL('..', import.meta.url));
 export const DIST = `${ROOT}dist/`;
@@ -38,6 +39,11 @@ export async function build() {
     const css = await readFile(ROOT + style, 'utf8');
     const { code } = await transform(css, { loader: 'css', minify: true });
     await writeFile(DIST + style, code);
+  }
+
+  for (const [from, to] of Object.entries(REDIRECTS)) {
+    await mkdir(DIST + from, { recursive: true });
+    await writeFile(`${DIST}${from}index.html`, redirectPage(to));
   }
 }
 
