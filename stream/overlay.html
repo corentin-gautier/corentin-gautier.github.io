@@ -162,8 +162,9 @@ Settings:
 		.msg { flex: none; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 22px; line-height: 1.32; overflow-wrap: anywhere; animation: enter 0.35s ease-out; }
 		.msg:last-child { border-bottom: 0; }
 		@keyframes enter { from { opacity: 0; transform: translateY(12px); } }
-		.msg__name { display: inline-flex; align-items: center; gap: 9px; margin-right: 10px; font-weight: 700; letter-spacing: -0.02em; }
-		.msg__name::before { content: ""; width: 10px; height: 10px; background: var(--user, var(--muted)); }
+		/* Inline, so the name sits on the message's baseline; the square in the user's colour at mid x-height */
+		.msg__name { margin-right: 10px; font-weight: 700; letter-spacing: -0.02em; }
+		.msg__name::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 9px; vertical-align: 0.1em; background: var(--user, var(--muted)); }
 		.msg--staff .msg__name { color: var(--accent-text); }
 		.msg__text { color: var(--ink); }
 		.msg--action .msg__text { font-family: var(--serif); font-style: italic; }
@@ -198,7 +199,7 @@ Settings:
 		.headline { font-size: var(--size, 200px); font-weight: 700; line-height: 0.92; letter-spacing: -0.055em; }
 		.headline > span { display: block; padding-left: calc(var(--i) * 1%); white-space: nowrap; }
 		.facts { display: flex; gap: 64px; align-items: flex-end; justify-content: space-between; }
-		.facts dl { margin: 0; display: grid; grid-template-columns: auto auto; gap: 10px 32px; font-size: 26px; line-height: 1.3; }
+		.facts dl { margin: 0; display: grid; grid-template-columns: auto auto; gap: 10px 32px; font-size: 26px; line-height: 1.3; white-space: nowrap; }
 		.facts dt { color: var(--muted); }
 		.facts dd { margin: 0; font-weight: 600; }
 		.facts .links { padding: 0; font-size: 22px; gap: 10px; }
@@ -242,22 +243,35 @@ Settings:
 		.eq i:nth-child(2) { animation-duration: 0.6s; animation-delay: -0.3s; }
 		.eq i:nth-child(3) { animation-duration: 0.75s; animation-delay: -0.5s; }
 		@keyframes eq { from { transform: scaleY(0.25); } }
-		.badge .music { padding-top: 12px; }
-		.badge .music__art { width: 56px; height: 56px; }
 		.facts .music { padding: 0; border: 0; max-width: 560px; }
 		.facts .music__art { width: 96px; height: 96px; }
 		.facts .music__title { font-size: 26px; }
 		.facts .music__artist { font-size: 22px; }
 
 		/* --- Full screen game: a badge in a corner, marks around the webcam ------------------------ */
-		.badge { position: absolute; display: flex; flex-direction: column; gap: 12px; min-width: 340px; max-width: 640px; padding: 18px 24px 20px 18px; background: color-mix(in srgb, var(--paper) 90%, transparent); outline: 1px solid var(--line); }
+		.badge { 
+			position: absolute; 
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+			min-width: 384px;
+			max-width: 640px;
+			padding: 18px 24px 20px 18px; 
+			background: color-mix(in srgb, var(--paper) 90%, transparent); 
+			outline: 1px solid var(--line); 
+		}
 		.badge[data-corner="tl"] { left: 32px; top: 32px; }
 		.badge[data-corner="tr"] { right: 32px; top: 32px; }
 		.badge[data-corner="bl"] { left: 32px; bottom: 32px; }
+		.badge[data-corner="br"] { right: 32px; bottom: 248px; }
 		.badge .wordmark { font-size: 26px; gap: 14px; }
 		.badge .wordmark__mark { width: 40px; height: 40px; }
-		.badge .status { margin: 0; padding: 10px 0 0; border-bottom: 0; gap: 24px; font-size: 20px; }
-		.badge .topic p:last-child { font-size: 30px; white-space: normal; }
+		.badge .status { margin: 0; padding: 0; border: 0; gap: 24px; font-size: 20px; }
+		.badge .topic { border-top: 1px solid var(--line); padding-top: 12px; }
+		.badge .topic p:last-child { font-size: 18px; white-space: normal; }
+		.badge .music { padding-top: 12px; }
+		.badge .music__art { width: 56px; height: 56px; }
+
 		.full-cam { position: absolute; right: 32px; bottom: 32px; width: 384px; height: 216px; }
 		.alerts[data-at="full"] { top: 48px; }
 
@@ -348,8 +362,8 @@ Settings:
 
 		<!-- The game in full screen -->
 		<div id="full" hidden>
-			<div class="badge" id="badge">
-				<div class="wordmark" data-wordmark></div>
+			<div class="badge" id="badge" data-corner="br">
+				<!-- <div class="wordmark" data-wordmark></div> -->
 				<p class="status">
 					<span><i class="dot dot--live"></i><b data-text="live"></b></span>
 					<time class="tabular" data-uptime></time>
@@ -547,7 +561,7 @@ Settings:
 		for (const node of $$("[data-cam]")) node.hidden = scene === "chat" || params.get("cam") === "0";
 		$('[data-chat-slot="game"]').hidden = !withChat;
 		$("[data-links-slot]").hidden = withChat || !links.length;
-		$("#badge").dataset.corner = ["tr", "bl"].includes(params.get("corner")) ? params.get("corner") : "tl";
+		$("#badge").dataset.corner = ["tr", "bl", "br"].includes(params.get("corner")) ? params.get("corner") : "tl";
 		$('[data-chat-slot="screen"]').hidden = !withChat;
 		$("#alerts").dataset.at = full ? "screen" : scene === "full" ? "full" : "game";
 
@@ -688,6 +702,9 @@ Settings:
 		const MAX_MESSAGES = 40;
 
 		// Twitch gives the emotes as code point ranges: "25:0-4,12-16/1902:6-10"
+		// The space before ? ! : ; » never breaks: no punctuation alone at the start of a line
+		const keepTogether = (part) => part.replace(/ (?=[?!:;»])/g, "\u202f");
+
 		function messageBody(text, emotes) {
 			const body = el("span", "msg__text");
 			const chars = Array.from(text);
@@ -702,14 +719,14 @@ Settings:
 			ranges.sort((a, b) => a.from - b.from);
 			let cursor = 0;
 			for (const { id, from, to } of ranges) {
-				if (from > cursor) body.append(chars.slice(cursor, from).join(""));
+				if (from > cursor) body.append(keepTogether(chars.slice(cursor, from).join("")));
 				const img = el("img");
 				img.src = `https://static-cdn.jtvnw.net/emoticons/v2/${id}/default/dark/2.0`;
 				img.alt = chars.slice(from, to + 1).join("");
 				body.append(img);
 				cursor = to + 1;
 			}
-			if (cursor < chars.length) body.append(chars.slice(cursor).join(""));
+			if (cursor < chars.length) body.append(keepTogether(chars.slice(cursor).join("")));
 			return body;
 		}
 
@@ -876,7 +893,7 @@ Settings:
 		function runDemo() {
 			const people = [["Margaux", "#ff7a59"], ["pixel_louis", "#59a5ff"], ["Sam", "#b980ff"], ["ArthurDev", "#3dd68c"], ["nina.codes", "#ffcc4d"]];
 			const lines = lang === "fr"
-				? ["Salut tout le monde !", "C'est quoi ton thème VS Code ?", "Le site pèse vraiment moins de 300 ko ?", "Trop propre ce layout", "gg", "Tu fais ça en vanilla ou avec un framework ?", "Le grid à 12 colonnes <3", "Bonsoir depuis Lyon"]
+				? ["Salut tout le monde !", "C'est quoi ton thème VS Code ? Message super long dans le chat pour passer à la aligne et voir du coup ahahah", "Le site pèse vraiment moins de 300 ko ?", "Trop propre ce layout", "gg", "Tu fais ça en vanilla ou avec un framework ?", "Le grid à 12 colonnes <3", "Bonsoir depuis Lyon"]
 				: ["Hey everyone!", "What's your VS Code theme?", "Is the site really under 300 kB?", "That layout is so clean", "gg", "Vanilla or a framework?", "The 12-column grid <3", "Good evening from Lyon"];
 			let n = 0;
 			const say = () => {
