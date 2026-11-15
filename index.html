@@ -4,9 +4,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Corentin Gautier — Web designer et développeur front-end à Bordeaux</title>
+  <title>Corentin Gautier — Web designer et développeur front-end freelance à Bordeaux</title>
   <meta name="description"
-    content="Portfolio de Corentin Gautier, web designer et développeur front-end à Bordeaux, engagé dans l'éco-conception web : parcours, réalisations et projets open source.">
+    content="Corentin Gautier, web designer et développeur front-end freelance à Bordeaux : sites WordPress sur mesure, web design, renfort front-end et audits d'éco-conception et d'accessibilité.">
   <meta name="author" content="Corentin Gautier">
   <link rel="canonical" href="https://corentingautier.dev/">
   <meta name="geo.region" content="FR-NAQ">
@@ -18,14 +18,14 @@
   <meta property="og:type" content="website">
   <meta property="og:locale" content="fr_FR">
   <meta property="og:site_name" content="Corentin Gautier">
-  <meta property="og:title" content="Corentin Gautier — Web designer et développeur front-end à Bordeaux">
+  <meta property="og:title" content="Corentin Gautier — Web designer et développeur front-end freelance à Bordeaux">
   <meta property="og:description"
-    content="Web designer et développeur front-end à Bordeaux depuis 2012, engagé dans l'éco-conception web. Parcours, réalisations et projets open source.">
+    content="Web designer et développeur front-end freelance à Bordeaux, depuis 2012. Des sites sur mesure, légers et accessibles, de la maquette au code.">
   <meta property="og:url" content="https://corentingautier.dev/">
   <meta property="og:image" content="https://corentingautier.dev/assets/img/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Corentin Gautier, web designer et développeur front-end à Bordeaux">
+  <meta property="og:image:alt" content="Corentin Gautier, web designer et développeur front-end freelance à Bordeaux">
   <meta name="twitter:card" content="summary_large_image">
 
   <!-- Google meta -->
@@ -33,7 +33,6 @@
 
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/css/style.css">
-  <script type="module" src="/assets/js/snap-carousel/snap-carousel.js"></script>
 
   <script type="application/ld+json">
   {
@@ -44,7 +43,7 @@
         "@id": "https://corentingautier.dev/#website",
         "url": "https://corentingautier.dev/",
         "name": "Corentin Gautier",
-        "description": "Portfolio de Corentin Gautier, web designer et développeur front-end à Bordeaux",
+        "description": "Corentin Gautier, web designer et développeur front-end freelance à Bordeaux",
         "inLanguage": "fr-FR",
         "publisher": { "@id": "https://corentingautier.dev/#corentin" }
       },
@@ -52,7 +51,7 @@
         "@type": "ProfilePage",
         "@id": "https://corentingautier.dev/#page",
         "url": "https://corentingautier.dev/",
-        "name": "Corentin Gautier — Web designer et développeur front-end à Bordeaux",
+        "name": "Corentin Gautier — Web designer et développeur front-end freelance à Bordeaux",
         "isPartOf": { "@id": "https://corentingautier.dev/#website" },
         "mainEntity": { "@id": "https://corentingautier.dev/#corentin" },
         "inLanguage": "fr-FR"
@@ -65,8 +64,8 @@
         "familyName": "Gautier",
         "url": "https://corentingautier.dev/",
         "image": "https://corentingautier.dev/assets/img/corentin-gautier.jpg",
-        "jobTitle": "Web designer et développeur front-end",
-        "description": "Web designer et développeur front-end à Bordeaux, spécialisé dans les sites WordPress éco-conçus et accessibles.",
+        "jobTitle": "Web designer et développeur front-end freelance",
+        "description": "Web designer et développeur front-end freelance à Bordeaux, spécialisé dans les sites WordPress éco-conçus et accessibles.",
         "address": {
           "@type": "PostalAddress",
           "addressLocality": "Bordeaux",
@@ -74,6 +73,12 @@
           "addressCountry": "FR"
         },
         "knowsLanguage": ["fr", "en"],
+        "makesOffer": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Création de site WordPress sur mesure", "areaServed": "FR" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Web design et identité visuelle", "areaServed": "FR" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Renfort en développement front-end", "areaServed": "FR" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Audit d'éco-conception et d'accessibilité", "areaServed": "FR" } }
+        ],
         "knowsAbout": [
           "Web design",
           "UI design",
@@ -101,498 +106,458 @@
 <body>
   <a class="skip-link" href="#contenu">Aller au contenu</a>
 
-  <header class="site-header">
-    <div class="container site-header__inner">
-      <a class="wordmark" href="/" aria-label="Corentin Gautier, accueil">
-        <span class="wordmark__mark" aria-hidden="true">
-          <svg viewBox="0 0 64 64" width="32" height="32">
-            <path d="M16 48V36a20 20 0 0 1 20-20h12v12a20 20 0 0 1-20 20zl18-18" fill="none" stroke="currentColor" stroke-width="5"/>
-            <circle cx="35" cy="29" r="5" fill="currentColor"/>
-          </svg>
-        </span>
-        <span>Corentin Gautier</span>
-      </a>
-      <p class="meter" data-page-meter>
-        <button class="meter__button" type="button" aria-describedby="meter-tip">
-          <span class="visually-hidden">Poids chargé par cette page :</span>
-          <span data-page-weight>&lt; 300&nbsp;ko</span>
-        </button>
-        <span class="meter__tip" id="meter-tip" role="tooltip">
-          <strong data-page-delta hidden></strong>
-          Poids téléchargé par cette page jusqu'ici. Il monte pendant le défilement.
-        </span>
-      </p>
-      <nav aria-label="Navigation principale">
-        <ul class="nav">
-          <li><a href="#eco-conception">Éco-conception</a></li>
-          <li><a href="#competences">Compétences</a></li>
-          <li><a href="#design">Design</a></li>
-          <li><a href="#code">Code</a></li>
-          <li><a href="#parcours">Parcours</a></li>
-          <li><a class="nav__cta" href="#contact">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
+  <header class="site-header grid grid--band">
+    <a class="wordmark" href="/" aria-label="Corentin Gautier, accueil">
+      <span class="wordmark__mark" aria-hidden="true">
+        <svg viewBox="0 0 64 64" width="32" height="32">
+          <path d="M16 48V36a20 20 0 0 1 20-20h12v12a20 20 0 0 1-20 20zl18-18" fill="none" stroke="currentColor" stroke-width="5"/>
+          <circle cx="35" cy="29" r="5" fill="currentColor"/>
+        </svg>
+      </span>
+      <span>Corentin Gautier</span>
+    </a>
+    <nav aria-label="Navigation principale">
+      <ul class="nav">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#eco-conception">Éco-conception</a></li>
+        <li><a href="#design">Réalisations</a></li>
+        <li><a href="#tarifs">Tarifs</a></li>
+        <li><a href="#parcours">Parcours</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <p class="meter" data-page-meter>
+      <button class="meter__button" type="button" aria-describedby="meter-tip">
+        <span class="visually-hidden">Poids chargé par cette page :</span>
+        <span data-page-weight>&lt; 300&nbsp;ko</span>
+      </button>
+      <span class="meter__tip" id="meter-tip" role="tooltip">
+        <strong data-page-delta hidden></strong>
+        Poids téléchargé par cette page jusqu'ici. Il monte pendant le défilement.
+      </span>
+    </p>
   </header>
 
   <main id="contenu">
 
-    <section class="hero">
-      <div class="container hero__inner">
-        <div class="hero__text">
-          <h1>
-            Web <span class="voice-design">designer</span> &amp; <span class="voice-code">développeur</span>
-            front-end, pour un web plus&nbsp;<em>léger</em>.
-          </h1>
-          <p class="lead">
-            Au moins on évite les problèmes de communication entre le développeur et le designer, enfin si j'ai bien
-            dormi ...
-          </p>
-          <p class="actions">
-            <a class="button" href="#parcours">Voir mon parcours</a>
-            <a class="button button--ghost" href="#design">Voir mes réalisations</a>
-          </p>
-        </div>
+    <section class="hero grid">
+      <h1 class="hero__title">
+        <span style="--i: 0">Web <span class="voice-design">designer</span></span>
+        <span style="--i: 14">&amp; <span class="voice-code">développeur</span></span>
+        <span style="--i: 0">front-end <span class="hero__break">freelance,</span></span>
+        <span style="--i: 32">pour un web</span>
+        <span style="--i: 50">plus <em>léger</em>.</span>
+      </h1>
 
-        <dl class="hero__facts">
-          <div>
-            <dt>Depuis</dt>
-            <dd>2012</dd>
+      <ul class="hero__facts">
+        <li>Bordeaux, ou à distance</li>
+        <li>Depuis 2012</li>
+        <li>Disponible pour de nouveaux projets</li>
+      </ul>
+
+      <div class="hero__text">
+        <p>
+          Un seul interlocuteur de la maquette au code, pour des sites rapides, accessibles et faciles à faire vivre.
+          Au moins on évite les problèmes de communication entre le développeur et le designer, enfin si j'ai bien
+          dormi ...
+        </p>
+        <p><a class="cta" href="#contact">Parler de votre projet</a></p>
+      </div>
+    </section>
+
+    <section id="services" class="services grid">
+      <h2 class="section-title">Ce que je fais pour vous</h2>
+      <p class="services__intro">
+        Pour des entreprises, des associations, des agences ou des startups : sites vitrines, éditoriaux,
+        boutiques en ligne, applications métier ou mobiles. Le design, le code, ou les deux.
+        <small>(tant que c'est pas du back ...)</small>
+      </p>
+
+      <ul class="services__list">
+        <li>
+          <h3>Sites WordPress sur mesure</h3>
+          <p>
+            De la maquette à la mise en ligne : thème sur mesure, blocs Gutenberg dédiés, WooCommerce.
+            Léger par défaut, et simple à mettre à jour par vos équipes.
+          </p>
+        </li>
+        <li>
+          <h3>Web design &amp; identité</h3>
+          <p>
+            Maquettes, design system, logo et charte graphique. Des interfaces pensées
+            pour vos contenus et pour les personnes qui les consultent.
+          </p>
+        </li>
+        <li>
+          <h3>Renfort front-end</h3>
+          <p>
+            Pour une agence ou une équipe produit : intégration, HTML, CSS et JavaScript, Angular ou React.
+            Du code lisible, que votre équipe pourra reprendre.
+          </p>
+        </li>
+        <li>
+          <h3>Audits éco-conception &amp; accessibilité</h3>
+          <p>
+            Un diagnostic chiffré de votre site existant (poids, performance, accessibilité, référencement)
+            et un plan d'actions priorisé, que je peux aussi mettre en œuvre.
+          </p>
+        </li>
+      </ul>
+    </section>
+
+    <section id="eco-conception" class="eco grid">
+      <figure class="weight">
+        <div class="weight__median">
+          <p class="weight__label">Page web médiane<br><strong>2,5&nbsp;Mo</strong></p>
+          <div class="weight__page" data-page-square style="width: 32%">
+            <p class="weight__label weight__label--page">Cette page<br><strong data-page-weight>&lt; 300&nbsp;ko</strong></p>
           </div>
-          <div>
-            <dt>Engagement</dt>
-            <dd>Éco-conception</dd>
-          </div>
-          <div>
-            <dt>Basé à</dt>
-            <dd>Bordeaux</dd>
-          </div>
-        </dl>
-
-      </div>
-    </section>
-
-    <section id="eco-conception" class="section">
-      <div class="container">
-        <header class="section__head section__head--leaf">
-          <svg class="section__leaf" viewBox="13.5 13.5 37 37" aria-hidden="true">
-            <path d="M16 48V36a20 20 0 0 1 20-20h12v12a20 20 0 0 1-20 20zl18-18" fill="none" stroke="#111210" stroke-width="5"/>
-            <circle cx="35" cy="29" r="5" fill="#111210"/>
-          </svg>
-          <h2>Éco-conception : des sites sobres, donc rapides</h2>
-          <p>
-            Un site éco-conçu ne charge que ce dont il a besoin. Il consomme moins d'énergie,
-            s'affiche plus vite sur un téléphone ou un réseau lent, et se référence mieux.
-            En bref c'est la marque d'un travail bien fait et <u>responsable</u>. Et oui, on peut faire
-            du <strong>beau et éco-conçu</strong> en même temps.
-          </p>
-        </header>
-
-        <div class="eco">
-          <ul class="principles">
-            <li>
-              <h3>Le natif d'abord</h3>
-              <p>
-                HTML et CSS avant JavaScript, les fonctions du navigateur avant une bibliothèque.
-                Pas de jQuery, pas de dépendance ajoutée par habitude.
-              </p>
-            </li>
-            <li>
-              <h3>Ne charger que le nécessaire</h3>
-              <p>
-                Un fichier n'est servi que sur les pages qui l'utilisent. Les images arrivent
-                à l'approche de l'écran, les vidéos au clic.
-              </p>
-            </li>
-            <li>
-              <h3>Des médias au bon format</h3>
-              <p>
-                Images en AVIF aux dimensions affichées, polices du système plutôt que
-                téléchargées : le poids d'une page se joue d'abord là.
-              </p>
-            </li>
-            <li>
-              <h3>Ni traceur, ni superflu</h3>
-              <p>
-                Pas de script tiers sans utilité pour la personne qui consulte la page.
-                Un thème sombre suit le réglage de l'appareil.
-              </p>
-            </li>
-          </ul>
-
-          <aside class="audit" aria-labelledby="audit-titre">
-            <h3 id="audit-titre">Cette page, preuve à l'appui</h3>
-            <p class="audit__weight" data-page-weight>&lt; 300&nbsp;ko</p>
-            <p>téléchargés pour l'afficher</p>
-
-            <div class="gauge">
-              <span>Cette page</span>
-              <span class="gauge__track">
-                <span class="gauge__bar" data-page-bar style="width: 12%"></span>
-              </span>
-              <span class="gauge__median">Page web médiane : <a href="https://httparchive.org/reports/page-weight"
-                  rel="noopener" target="_blank">environ 2,5&nbsp;Mo</a></span>
-            </div>
-
-            <dl class="audit__facts">
-              <div>
-                <dt>Requêtes</dt>
-                <dd data-page-requests>moins de 20</dd>
-              </div>
-              <div>
-                <dt>Framework JavaScript</dt>
-                <dd>aucun</dd>
-              </div>
-              <div>
-                <dt>Polices téléchargées</dt>
-                <dd>0</dd>
-              </div>
-              <div>
-                <dt>Cookies et traceurs</dt>
-                <dd>0</dd>
-              </div>
-            </dl>
-            <p class="audit__note" data-page-note hidden>
-              Mesuré en direct dans votre navigateur. Le chiffre monte pendant le défilement :
-              chaque image n'est téléchargée qu'à l'approche de l'écran.
-            </p>
-          </aside>
         </div>
-      </div>
-    </section>
+        <figcaption>
+          Surfaces proportionnelles au poids téléchargé. Médiane mesurée par
+          <a href="https://httparchive.org/reports/page-weight" rel="noopener" target="_blank">HTTP Archive</a>.
+        </figcaption>
+      </figure>
 
-    <section id="competences" class="section">
-      <div class="container">
-        <header class="section__head">
-          <h2>Mes compétences : Design & Dev</h2>
+      <div class="eco__text">
+        <h2 class="section-title">Éco-conception : des sites sobres, donc rapides</h2>
+        <p class="eco__lead">
+          Un site éco-conçu ne charge que ce dont il a besoin. Il consomme moins d'énergie,
+          s'affiche plus vite sur un téléphone ou un réseau lent, et se référence mieux.
+          Et oui, on peut faire du beau et éco-conçu en même temps.
+        </p>
+        <div class="eco__principles">
           <p>
-            Sites vitrines, éditoriaux, boutiques en ligne, applications métier complexes, applications mobile :
-            j'interviens sur le design comme sur le code.
-            <br>
-            <small style="font-family: var(--mono);font-size: 10px;">(tant que c'est pas du back ...)</small>
+            <strong>Le natif d'abord.</strong> HTML et CSS avant JavaScript, les fonctions du navigateur avant
+            une bibliothèque. Pas de dépendance ajoutée par habitude.
           </p>
-        </header>
-
-        <ul class="services">
-          <li>
-            <h3>Web design &amp; identité</h3>
-            <p>
-              Maquettes, design system, logo et charte graphique. Des interfaces pensées
-              pour les contenus et les personnes qui les consultent.
-            </p>
-          </li>
-          <li>
-            <h3>WordPress sur mesure</h3>
-            <p>
-              Thèmes sur mesure, blocs Gutenberg dédiés, WooCommerce.
-              Optimisé par défaut, simple à contribuer.
-            </p>
-          </li>
-          <li>
-            <h3>Développement front-end</h3>
-            <p>
-              HTML, CSS et JavaScript Vanilla. Angular ou React quand le besoin le nécessite.
-              Du code lisible, des bonnes pratiques, au plus simple et optimisé.
-            </p>
-          </li>
-          <li>
-            <h3>Accessibilité &amp; référencement</h3>
-            <p>
-              Des pages utilisables au clavier et avec un lecteur d'écran, un balisage
-              sémantique et des données structurées.
-            </p>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <section id="design" class="section">
-      <div class="container">
-        <header class="section__head">
-          <h2>Web design : quelques réalisations</h2>
           <p>
-            Identités, sites et interfaces réalisés ces dernières années.
-            Le reste est sur <a href="https://dribbble.com/Median" rel="me noopener" target="_blank">mon profil
-              Dribbble</a>.
+            <strong>Ne charger que le nécessaire.</strong> Un fichier n'est servi que sur les pages qui
+            l'utilisent. Les images arrivent à l'approche de l'écran, les vidéos au clic.
           </p>
-        </header>
-      </div>
-
-      <div class="container container--wide">
-        <snap-carousel class="shots" displayed="1.15" gap="20" controls nav prev-label="Précédent" next-label="Suivant"
-          responsive='[{"breakpoint":700,"settings":{"displayed":2.2}},{"breakpoint":1100,"settings":{"displayed":3.2}}]'>
-          <ul slot="scroller">
-            <li class="shot">
-              <picture>
-                <source srcset="/assets/img/easynode-landing.avif" type="image/avif">
-                <img src="/assets/img/easynode-landing.jpg" width="960" height="640"
-                  alt="Landing page EasyNode : fond violet, grand titre « Node running made easy » et mascotte ours polaire.">
-              </picture>
-              <h3><a href="https://dribbble.com/shots/27145069-Easynode-Landing" rel="noopener"
-                  target="_blank">EasyNode, landing
-                  page</a></h3>
-              <p>Identité de marque, mascotte et web design</p>
-            </li>
-            <li class="shot">
-              <picture>
-                <source srcset="/assets/img/easynode-marketplace.avif" type="image/avif">
-                <img src="/assets/img/easynode-marketplace.jpg" width="960" height="640" loading="lazy"
-                  alt="Marketplace EasyNode : grille de cartes de nœuds blockchain sur fond jaune.">
-              </picture>
-              <h3><a href="https://dribbble.com/shots/27145049-Easynode-Marketplace" rel="noopener"
-                  target="_blank">EasyNode,
-                  marketplace</a></h3>
-              <p>Design system et interface d'application</p>
-            </li>
-            <li class="shot">
-              <picture>
-                <source srcset="/assets/img/jack-in-the-box.avif" type="image/avif">
-                <img src="/assets/img/jack-in-the-box.jpg" width="960" height="640" loading="lazy"
-                  alt="Page d'accueil du site Jack In The Box : titre « Proposal Management » et illustration isométrique.">
-              </picture>
-              <h3><a href="https://dribbble.com/shots/24289943-Web-design-for-Jack-In-The-Box" rel="noopener"
-                  target="_blank">Jack In
-                  The Box</a></h3>
-              <p>Web design</p>
-            </li>
-            <li class="shot">
-              <picture>
-                <source srcset="/assets/img/nouvelles-renaissances.avif" type="image/avif">
-                <img src="/assets/img/nouvelles-renaissances.jpg" width="960" height="640" loading="lazy"
-                  alt="Maquette du site Nouvelles Renaissances.">
-              </picture>
-              <h3><a href="https://dribbble.com/shots/24289872-Web-Design-for-Nouvelles-Renaissances" rel="noopener"
-                  target="_blank">Nouvelles Renaissances</a></h3>
-              <p>Web design</p>
-            </li>
-            <li class="shot">
-              <picture>
-                <source srcset="/assets/img/project-management-ui.avif" type="image/avif">
-                <img src="/assets/img/project-management-ui.jpg" width="960" height="640" loading="lazy"
-                  alt="Interface de suivi de dossiers : fil d'étapes, fiche des tiers et synthèse financière.">
-              </picture>
-              <h3><a href="https://dribbble.com/shots/24287730-Project-Management-UI" rel="noopener"
-                  target="_blank">Gestion de
-                  projets</a></h3>
-              <p>UI design d'application métier</p>
-            </li>
-            <li class="shot">
-              <picture>
-                <source srcset="/assets/img/stream-overlay.avif" type="image/avif">
-                <img src="/assets/img/stream-overlay.jpg" width="960" height="640" loading="lazy"
-                  alt="Habillage de live : écran « Le live va bientôt commencer » sur fond turquoise avec un buste antique.">
-              </picture>
-              <h3><a href="https://dribbble.com/shots/14966251-Stream-Overlay" rel="noopener" target="_blank">Stream
-                  overlay</a></h3>
-              <p>Habillage de live et identité personnelle</p>
-            </li>
-          </ul>
-        </snap-carousel>
-      </div>
-    </section>
-
-    <section id="code" class="section section--code">
-      <div class="container">
-        <header class="section__head">
-          <h2>Développement : des outils faits maison</h2>
           <p>
-            Ce que j'apprends d'un projet, je le range dans des outils réutilisables.
-            Deux d'entre eux sont open source, dont le carrousel que vous venez de faire défiler.
+            <strong>Des médias au bon format.</strong> Images en AVIF aux dimensions affichées, polices du
+            système plutôt que téléchargées.
           </p>
-        </header>
-
-        <div class="projects">
-          <article class="project project--feature">
-            <p class="project__kind">Générateur de sites WordPress</p>
-            <h3>La Forge</h3>
-            <p>
-              Mon point de départ pour chaque site WordPress : une ligne de commande,
-              et un projet complet tourne en local sous Docker avec un thème sur mesure
-              (Timber, Twig, blocs ACF) et tous les composants qu'un site utilise d'habitude.
-            </p>
-            <p>
-              Deux règles guident chaque ajout : la page la plus légère possible,
-              et la plus accessible possible. Le natif avant le JavaScript,
-              pas de jQuery, et un fichier n'est chargé que sur les pages qui en ont besoin.
-            </p>
-            <ul class="tags" aria-label="Technologies">
-              <li>WordPress</li>
-              <li>Timber / Twig</li>
-              <li>ACF</li>
-              <li>Docker</li>
-              <li>Gulp</li>
-              <li>WooCommerce</li>
-            </ul>
-            <dl class="project__facts">
-              <div>
-                <dt>En service depuis</dt>
-                <dd>2019</dd>
-              </div>
-              <div>
-                <dt>Commits</dt>
-                <dd>1 300+</dd>
-              </div>
-            </dl>
-          </article>
-
-          <article class="project">
-            <p class="project__kind">Web component</p>
-            <h3><a href="https://corentingautier.dev/snap-carousel/">Snap Carousel</a></h3>
-            <p>
-              Un carrousel de 4&nbsp;kB, sans dépendance, bâti sur le défilement natif du navigateur
-              (CSS scroll snap). Il se configure en HTML et ne télécharge que les fonctions utilisées.
-            </p>
-            <ul class="tags" aria-label="Technologies">
-              <li>JavaScript</li>
-              <li>Custom Elements</li>
-              <li>CSS</li>
-            </ul>
-            <p class="project__links">
-              <a href="https://github.com/corentin-gautier/snap-carousel" rel="me noopener" target="_blank">Code source</a>
-              <a href="https://www.npmjs.com/package/snap-carousel.js" rel="noopener" target="_blank">Paquet npm</a>
-            </p>
-          </article>
-
-          <article class="project">
-            <p class="project__kind">Extension WordPress</p>
-            <h3><a href="https://corentingautier.dev/core-blocks-enhancer/">Core Blocks Enhancer</a></h3>
-            <p>
-              Des options d'accessibilité, de SEO et de performance ajoutées aux blocs natifs de
-              Gutenberg : niveaux de titres, chargement différé, vidéos YouTube chargées au clic.
-            </p>
-            <ul class="tags" aria-label="Technologies">
-              <li>Gutenberg</li>
-              <li>PHP</li>
-              <li>React</li>
-            </ul>
-            <p class="project__links">
-              <a href="https://github.com/corentin-gautier/core-blocks-enhancer" rel="me noopener" target="_blank">Code source</a>
-            </p>
-          </article>
-        </div>
-
-        <aside class="side-projects" aria-labelledby="annexes-titre">
-          <p class="eyebrow" id="annexes-titre">Projets annexes, hors développement web</p>
-          <ul>
-            <li class="side-project">
-              <h3><a href="https://cassonademod.com/">Cassonade</a></h3>
-              <p>
-                Un mod Minecraft qui corrige les petits agacements du jeu sans en changer l'esprit : sac à dos,
-                mini-map, carte du monde, journal de quêtes et une interface pixel redessinée à la main.
-              </p>
-              <p class="project__links">
-                <a href="https://github.com/corentin-gautier/cassonade" rel="me noopener" target="_blank">Code source</a>
-                <a href="https://modrinth.com/mod/cassonade" rel="noopener" target="_blank">Modrinth</a>
-                <a href="https://www.curseforge.com/minecraft/mc-mods/cassonade" rel="noopener" target="_blank">CurseForge</a>
-              </p>
-            </li>
-            <li class="side-project">
-              <h3><a href="https://corentingautier.dev/restyle-for-twitch/">Restyle for Twitch</a></h3>
-              <p>
-                Une extension Chrome qui rend l'interface de twitch.tv plus calme : barre latérale et chat discrets,
-                pages épurées, couleurs à régler soi-même. Un projet personnel, pour le plaisir.
-              </p>
-              <p class="project__links">
-                <a href="https://github.com/corentin-gautier/restyle-for-twitch" rel="me noopener" target="_blank">Code source</a>
-              </p>
-            </li>
-          </ul>
-        </aside>
-      </div>
-    </section>
-
-    <section id="parcours" class="section">
-      <div class="container">
-        <div class="about__intro">
-          <picture class="portrait">
-            <source srcset="/assets/img/corentin-gautier.avif" type="image/avif">
-            <img src="/assets/img/corentin-gautier.jpg" width="240" height="240" loading="lazy"
-              alt="Portrait de Corentin Gautier">
-          </picture>
-          <h2>Quatorze ans entre la maquette et le code</h2>
           <p>
-            Depuis 2012, je travaille à la fois
-            comme web designer et comme développeur front-end et Wordpress, avec un intérêt particulier pour
-            l'éco-conception et l'accessibilité.
+            <strong>Ni traceur, ni superflu.</strong> Pas de script tiers sans utilité pour la personne qui
+            consulte la page.
           </p>
         </div>
+        <p class="eco__facts">
+          Cette page : <span data-page-requests>moins de 20</span> requêtes, aucun framework JavaScript,
+          aucune police téléchargée, aucun cookie ni traceur.
+          <span data-page-note hidden>Mesuré en direct dans votre navigateur : le chiffre monte pendant le
+            défilement, chaque image n'étant téléchargée qu'à l'approche de l'écran.</span>
+        </p>
+      </div>
+    </section>
 
-        <ol class="timeline">
-          <li>
-            <p class="timeline__dates"><time datetime="2024-11">Nov. 2024</time> – <time datetime="2026-02">févr.
-                2026</time></p>
-            <h3>UI designer &amp; développeur front-end <span>EasyNode</span></h3>
+    <section id="design" class="work grid">
+      <h2 class="section-title">Quelques réalisations</h2>
+      <p class="work__intro">
+        Identités, sites et interfaces réalisés ces dernières années.
+        Le reste est sur <a href="https://dribbble.com/Median" rel="me noopener" target="_blank">mon profil Dribbble</a>.
+      </p>
+
+      <ul class="work__list">
+        <li class="work__item work__item--duo">
+          <div class="work__text">
+            <h3>EasyNode</h3>
+            <p class="work__what">Identité, web design, design system et développement</p>
             <p>
-              Refonte de l'image de marque, logo et charte graphique. Web design et design system
-              du site et de la marketplace, communication visuelle, développement React, web3 et WordPress, SEO.<br><br>
-              Résultat : <a href="https://easy-node.xyz" target="_blank" rel="noopener noreferrer nofollow">Site vitrine</a><span> &nbsp;-&nbsp; </span>
+              Refonte complète de la marque : logo, mascotte et charte graphique, puis le site vitrine
+              et la marketplace, de la maquette au code.
+            </p>
+            <p class="work__links">
+              <a href="https://easy-node.xyz" target="_blank" rel="noopener noreferrer nofollow">Site vitrine</a>
               <a href="https://app.easy-node.xyz/" target="_blank" rel="noopener noreferrer nofollow">Marketplace</a>
+              <a href="https://dribbble.com/shots/27145069-Easynode-Landing" rel="noopener" target="_blank">Dribbble</a>
             </p>
-          </li>
-          <li>
-            <p class="timeline__dates"><time datetime="2015-07">Juil. 2015</time> – <time datetime="2024-09">sept.
-                2024</time></p>
-            <h3>Développeur front-end, UI designer &amp; expert technique <span>Conserto</span></h3>
+          </div>
+          <div class="work__media">
+            <picture>
+              <source srcset="/assets/img/easynode-landing.avif" type="image/avif">
+              <img src="/assets/img/easynode-landing.jpg" width="960" height="640"
+                alt="Landing page EasyNode : fond violet, grand titre « Node running made easy » et mascotte ours polaire.">
+            </picture>
+            <picture>
+              <source srcset="/assets/img/easynode-marketplace.avif" type="image/avif">
+              <img src="/assets/img/easynode-marketplace.jpg" width="960" height="640" loading="lazy"
+                alt="Marketplace EasyNode : grille de cartes de nœuds blockchain sur fond jaune.">
+            </picture>
+          </div>
+        </li>
+        <li class="work__item">
+          <div class="work__text">
+            <h3>Nouvelles Renaissances</h3>
+            <p class="work__what">Web design</p>
             <p>
-              Développement WordPress, front-end, Angular,React et mobile hybride (Cordova, Capacitor). Web design,
-              éco-conception et accessibilité, conseil technique et avant-vente.
+              Proposition de design pour le site Nouvelles Renaissances, festival en Centre-Val de Loire.
             </p>
-          </li>
-          <li>
-            <p class="timeline__dates"><time datetime="2012-06">Juin 2012</time> – <time datetime="2015-07">juil.
-                2015</time></p>
-            <h3>Développeur front-end <span>Raccourci</span></h3>
+            <p class="work__links">
+              <a href="https://dribbble.com/shots/24289872-Web-Design-for-Nouvelles-Renaissances" rel="noopener" target="_blank">Voir sur Dribbble</a>
+            </p>
+          </div>
+          <div class="work__media">
+            <picture>
+              <source srcset="/assets/img/nouvelles-renaissances.avif" type="image/avif">
+              <img src="/assets/img/nouvelles-renaissances.jpg" width="960" height="640" loading="lazy"
+                alt="Page d'accueil du site Nouvelles Renaissances, avec sa recherche d'événements en une phrase.">
+            </picture>
+          </div>
+        </li>
+        <li class="work__item">
+          <div class="work__text">
+            <h3>Jack In The Box</h3>
+            <p class="work__what">Web design</p>
             <p>
-              Intégration HTML, CSS et JavaScript, développement AngularJS,
-              intégration sous Drupal, web design.
+              Proposition de design pour le site Jack In The Box, éditeur de logiciel de gestion des propositions commerciales.
             </p>
-          </li>
-          <li>
-            <p class="timeline__dates"><time datetime="2012">2012</time></p>
-            <h3>DUT Services et réseaux de communication</h3>
-          </li>
-        </ol>
-      </div>
+            <p class="work__links">
+              <a href="https://dribbble.com/shots/24289943-Web-design-for-Jack-In-The-Box" rel="noopener" target="_blank">Voir sur Dribbble</a>
+            </p>
+          </div>
+          <div class="work__media">
+            <picture>
+              <source srcset="/assets/img/jack-in-the-box.avif" type="image/avif">
+              <img src="/assets/img/jack-in-the-box.jpg" width="960" height="640" loading="lazy"
+                alt="Page d'accueil du site Jack In The Box : titre « Proposal Management » et illustration isométrique.">
+            </picture>
+          </div>
+        </li>
+        <li class="work__item">
+          <div class="work__text">
+            <h3>UI de gestion pour l'ADEME</h3>
+            <p class="work__what">UI design d'application métier</p>
+            <p>
+              Design d'interface pour l'outil interne de gestion des projets financés par l'ADEME.
+            </p>
+            <p class="work__links">
+              <a href="https://dribbble.com/shots/24287730-Project-Management-UI" rel="noopener" target="_blank">Voir sur Dribbble</a>
+            </p>
+          </div>
+          <div class="work__media">
+            <picture>
+              <source srcset="/assets/img/project-management-ui.avif" type="image/avif">
+              <img src="/assets/img/project-management-ui.jpg" width="960" height="640" loading="lazy"
+                alt="Interface de suivi de dossiers : fil d'étapes, fiche des tiers et synthèse financière.">
+            </picture>
+          </div>
+        </li>
+      </ul>
     </section>
 
-    <section id="contact" class="section contact">
-      <div class="container container--narrow">
-        <h2>Envie d'en savoir plus ?</h2>
-        <p class="lead">
-          Une question sur mon parcours ou sur l'une de ces réalisations ?
-          Le plus simple est de m'écrire sur LinkedIn.
+    <section id="code" class="tools grid grid--band">
+      <h2 class="section-title">Des outils faits maison</h2>
+      <p class="tools__intro">
+        Ce que j'apprends d'un projet, je le range dans des outils réutilisables :
+        le vôtre démarre sur une base éprouvée plutôt que sur une page blanche.
+      </p>
+
+      <article class="tool tool--main">
+        <h3 class="tool__name">La Forge</h3>
+        <div class="tool__body">
+          <p class="tool__kind">Générateur de sites WordPress, en service depuis 2019, plus de 1&nbsp;300 commits.</p>
+          <p>
+            Mon point de départ pour chaque site WordPress : une ligne de commande,
+            et un projet complet tourne en local sous Docker avec un thème sur mesure
+            (Timber, Twig, blocs ACF) et tous les composants qu'un site utilise d'habitude.
+          </p>
+          <p>
+            Deux règles guident chaque ajout : la page la plus légère possible,
+            et la plus accessible possible. Le natif avant le JavaScript,
+            et un fichier n'est chargé que sur les pages qui en ont besoin.
+          </p>
+          <p class="tool__stack">WordPress, Timber / Twig, ACF, Docker, Gulp, WooCommerce</p>
+        </div>
+      </article>
+
+      <article class="tool">
+        <h3 class="tool__name"><a href="https://corentingautier.dev/snap-carousel/">Snap Carousel</a></h3>
+        <div class="tool__body">
+          <p class="tool__kind">Web component open source</p>
+          <p>
+            Un carrousel de 4&nbsp;kB, sans dépendance, bâti sur le défilement natif du navigateur
+            (CSS scroll snap). Il se configure en HTML et ne télécharge que les fonctions utilisées.
+          </p>
+          <p class="tool__links">
+            <a href="https://github.com/corentin-gautier/snap-carousel" rel="me noopener" target="_blank">Code source</a>
+            <a href="https://www.npmjs.com/package/snap-carousel.js" rel="noopener" target="_blank">Paquet npm</a>
+          </p>
+        </div>
+      </article>
+
+      <article class="tool">
+        <h3 class="tool__name"><a href="https://corentingautier.dev/core-blocks-enhancer/">Core Blocks Enhancer</a></h3>
+        <div class="tool__body">
+          <p class="tool__kind">Extension WordPress open source</p>
+          <p>
+            Des options d'accessibilité, de SEO et de performance ajoutées aux blocs natifs de
+            Gutenberg : niveaux de titres, chargement différé, vidéos YouTube chargées au clic.
+          </p>
+          <p class="tool__links">
+            <a href="https://github.com/corentin-gautier/core-blocks-enhancer" rel="me noopener" target="_blank">Code source</a>
+          </p>
+        </div>
+      </article>
+
+      <aside class="aside-projects" aria-labelledby="annexes-titre">
+        <h3 id="annexes-titre">Et pour le plaisir, hors développement web</h3>
+        <p>
+          <a href="https://cassonademod.com/">Cassonade</a>, un mod Minecraft qui corrige les
+          petits agacements du jeu sans en changer l'esprit
+          (<a href="https://github.com/corentin-gautier/cassonade" rel="me noopener" target="_blank">code</a>,
+          <a href="https://modrinth.com/mod/cassonade" rel="noopener" target="_blank">Modrinth</a>,
+          <a href="https://www.curseforge.com/minecraft/mc-mods/cassonade" rel="noopener" target="_blank">CurseForge</a>),
+          et <a href="https://corentingautier.dev/restyle-for-twitch/">Restyle for Twitch</a>, une extension
+          Chrome qui rend l'interface de twitch.tv plus calme
+          (<a href="https://github.com/corentin-gautier/restyle-for-twitch" rel="me noopener" target="_blank">code</a>).
         </p>
-        <p class="actions">
-          <a class="button" href="https://www.linkedin.com/in/corentin-gautier-513b928a" rel="me noopener" target="_blank">Me contacter
-            sur LinkedIn</a>
-          <a class="button button--ghost button--kofi" href="https://ko-fi.com/corentingautier" rel="me noopener" target="_blank">
-            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-              <path fill="currentColor" d="M2.5 5.5h15v7.5a5 5 0 0 1-5 5h-5a5 5 0 0 1-5-5z"/>
-              <path fill="none" stroke="currentColor" stroke-width="2" d="M17.5 8h1.25a2.75 2.75 0 0 1 0 5.5H17.5"/>
-              <path fill="#ff5e5b" d="M10 15c-2-1.3-3.6-2.7-3.6-4.4a1.9 1.9 0 0 1 3.6-.9 1.9 1.9 0 0 1 3.6.9c0 1.7-1.6 3.1-3.6 4.4z"/>
-            </svg>
-            Me soutenir sur Ko-fi</a>
-        </p>
-        <ul class="contact__links">
-          <li><a href="https://github.com/corentin-gautier" rel="me noopener" target="_blank">GitHub</a></li>
-          <li><a href="https://dribbble.com/Median" rel="me noopener" target="_blank">Dribbble</a></li>
-          <li><a href="https://www.linkedin.com/in/corentin-gautier-513b928a" rel="me noopener" target="_blank">LinkedIn</a></li>
-        </ul>
-      </div>
+      </aside>
+    </section>
+
+    <section id="methode" class="method grid">
+      <h2 class="section-title">Comment on travaille ensemble</h2>
+      <p class="method__story">
+        On commence par en parler<sup>1</sup>, gratuitement. Je vous fais ensuite une proposition
+        claire<sup>2</sup>. Je conçois les maquettes, vous les validez, puis je développe<sup>3</sup>. On met en ligne, et je reste
+        là pour la suite<sup>4</sup>.
+      </p>
+      <ol class="method__notes">
+        <li>Votre projet, vos objectifs, vos délais et votre budget. Sans engagement.</li>
+        <li>Un périmètre détaillé et un devis au forfait, ou au jour pour une mission de renfort.</li>
+        <li>Les maquettes sont validées avant le développement. Vous suivez l'avancement sur une version de test en ligne.</li>
+        <li>Mise en production, prise en main de l'administration et documentation. Maintenance et évolutions si vous le souhaitez.</li>
+      </ol>
+    </section>
+
+    <section id="tarifs" class="pricing grid">
+      <h2 class="section-title">Tarifs</h2>
+      <p class="pricing__intro">
+        Des prix de départ, pour vous situer. Chaque projet fait ensuite l'objet d'un devis détaillé,
+        après un premier échange gratuit.
+      </p>
+
+      <ul class="pricing__list">
+        <li>
+          <p class="pricing__price"><span class="pricing__from">à partir de</span>4 500 €</p>
+          <h3>Site vitrine WordPress</h3>
+          <p>Maquettes et thème sur mesure, une dizaine de pages, mise en ligne et prise en main de l'administration.</p>
+        </li>
+        <li>
+          <p class="pricing__price"><span class="pricing__from">à partir de</span>8 000 €</p>
+          <h3>Boutique WooCommerce</h3>
+          <p>Le site vitrine, avec en plus le catalogue, le tunnel de commande et le paiement en ligne.</p>
+        </li>
+        <li>
+          <p class="pricing__price"><span class="pricing__from">à partir de</span>1 500 €</p>
+          <h3>Identité visuelle</h3>
+          <p>Logo, couleurs, typographies, et une charte graphique pour les appliquer partout.</p>
+        </li>
+        <li>
+          <p class="pricing__price"><span class="pricing__from">à partir de</span>2 000 €</p>
+          <h3>Audit éco-conception &amp; accessibilité</h3>
+          <p>Mesures, tests au clavier et au lecteur d'écran, rapport et plan d'actions priorisé.</p>
+        </li>
+        <li>
+          <p class="pricing__price"><span class="pricing__from">à partir de</span>500 €<span class="pricing__unit"> / jour</span></p>
+          <h3>Renfort front-end ou design</h3>
+          <p>Dans votre équipe ou à distance, facturé au jour travaillé.</p>
+        </li>
+        <li>
+          <p class="pricing__price"><span class="pricing__from">à partir de</span>60 €<span class="pricing__unit"> / mois</span></p>
+          <h3>Maintenance</h3>
+          <p>Mises à jour, sauvegardes et surveillance du site. Les évolutions sont chiffrées à part.</p>
+        </li>
+      </ul>
+
+      <p class="pricing__note">TVA non applicable, art. 293 B du CGI. Hébergement et nom de domaine non compris.</p>
+    </section>
+
+    <section id="parcours" class="career grid">
+      <h2 class="section-title">Quatorze ans entre la maquette et le code</h2>
+      <picture class="career__portrait">
+        <source srcset="/assets/img/corentin-gautier.avif" type="image/avif">
+        <img src="/assets/img/corentin-gautier.jpg" width="240" height="240" loading="lazy"
+          alt="Portrait de Corentin Gautier">
+      </picture>
+      <p class="career__intro">
+        Depuis 2012, je travaille à la fois comme web designer et comme développeur front-end et WordPress,
+        avec un intérêt particulier pour l'éco-conception et l'accessibilité. Aujourd'hui, je mets cette
+        expérience au service de vos projets, en freelance.
+      </p>
+
+      <ol class="career__list">
+        <li>
+          <p class="career__year" aria-hidden="true">2024</p>
+          <h3>UI designer &amp; développeur front-end, <span>EasyNode</span></h3>
+          <p class="career__dates"><time datetime="2024-11">Nov. 2024</time> – <time datetime="2026-02">févr. 2026</time></p>
+          <p class="career__desc">
+            Refonte de l'image de marque, logo et charte graphique. Web design et design system
+            du site et de la marketplace, communication visuelle, développement React, web3 et WordPress, SEO.
+            Voir le <a href="https://easy-node.xyz" target="_blank" rel="noopener noreferrer nofollow">site vitrine</a>
+            et la <a href="https://app.easy-node.xyz/" target="_blank" rel="noopener noreferrer nofollow">marketplace</a>.
+          </p>
+        </li>
+        <li>
+          <p class="career__year" aria-hidden="true">2015</p>
+          <h3>Développeur front-end, UI designer &amp; expert technique, <span>Conserto</span></h3>
+          <p class="career__dates"><time datetime="2015-07">Juil. 2015</time> – <time datetime="2024-09">sept. 2024</time></p>
+          <p class="career__desc">
+            Développement WordPress, front-end, Angular, React et mobile hybride (Cordova, Capacitor). Web design,
+            éco-conception et accessibilité, conseil technique et avant-vente.
+          </p>
+        </li>
+        <li>
+          <p class="career__year" aria-hidden="true">2012</p>
+          <h3>Développeur front-end, <span>Raccourci</span></h3>
+          <p class="career__dates"><time datetime="2012-06">Juin 2012</time> – <time datetime="2015-07">juil. 2015</time></p>
+          <p class="career__desc">
+            Intégration HTML, CSS et JavaScript, développement AngularJS, intégration sous Drupal, web design.
+            Juste après un DUT Services et réseaux de communication.
+          </p>
+        </li>
+      </ol>
+    </section>
+
+    <section id="contact" class="contact grid grid--band">
+      <h2 class="section-title">Un projet en tête ?</h2>
+      <p class="contact__text">
+        Un site à créer ou à refondre, des maquettes, un renfort sur votre équipe, un audit ?
+        Le premier échange est gratuit et sans engagement.
+      </p>
+      <a class="contact__big" href="mailto:contact@corentingautier.pro">
+        <span style="--i: 0">Écrivez-moi</span>
+        <span style="--i: 22">par email</span>
+      </a>
+      <ul class="contact__links">
+        <li><a href="mailto:contact@corentingautier.pro">contact@corentingautier.pro</a></li>
+        <li><a href="https://github.com/corentin-gautier" rel="me noopener" target="_blank">GitHub</a></li>
+        <li><a href="https://dribbble.com/Median" rel="me noopener" target="_blank">Dribbble</a></li>
+        <li><a href="https://www.linkedin.com/in/corentin-gautier-513b928a" rel="me noopener" target="_blank">LinkedIn</a></li>
+      </ul>
     </section>
 
   </main>
 
-  <footer class="site-footer">
-    <div class="container site-footer__inner">
-      <p>© 2026 Corentin Gautier, web designer et développeur front-end à Bordeaux.</p>
-      <p>Site statique, sans cookie ni traceur.</p>
-    </div>
+  <dialog class="lightbox" data-lightbox aria-label="Image agrandie">
+    <img class="lightbox__img" alt="" data-lightbox-img>
+    <p class="lightbox__caption" data-lightbox-caption></p>
+    <button class="lightbox__btn lightbox__close" type="button" data-lightbox-close aria-label="Fermer">✕</button>
+    <button class="lightbox__btn lightbox__prev" type="button" data-lightbox-step="-1" aria-label="Image précédente">←</button>
+    <button class="lightbox__btn lightbox__next" type="button" data-lightbox-step="1" aria-label="Image suivante">→</button>
+  </dialog>
+
+  <footer class="site-footer grid">
+    <p>© 2026 Corentin Gautier, web designer et développeur front-end freelance à Bordeaux.</p>
+    <p>Site statique, sans cookie ni traceur. <a href="/mentions-legales.html">Mentions légales</a></p>
   </footer>
 
   <script type="module">
     // Poids réellement téléchargé par cette page, comparé à la page web médiane
     const MEDIAN_BYTES = 2_500_000;
+    const kilo = (bytes) => `${Math.max(1, Math.round(bytes / 1000))} ko`;
     const set = (name, value) =>
       document.querySelectorAll(`[data-page-${name}]`).forEach((el) => { el.textContent = value; });
 
@@ -606,7 +571,7 @@
 
     const flash = (bytes) => {
       gained += bytes;
-      delta.textContent = `+${Math.max(1, Math.round(gained / 1000))}\u00a0ko à l'instant.`;
+      delta.textContent = `+${kilo(gained)} à l'instant.`;
       delta.hidden = false;
       meter.classList.add('is-fresh');
       clearTimeout(hideTimer);
@@ -627,9 +592,11 @@
       if (settled && bytes > lastBytes) flash(bytes - lastBytes);
       lastBytes = bytes;
 
-      set('weight', `${Math.round(bytes / 1000)}\u00a0ko`);
+      set('weight', kilo(bytes));
       set('requests', entries.length);
-      document.querySelector('[data-page-bar]').style.width = `${(bytes / MEDIAN_BYTES) * 100}%`;
+      // Le côté du carré suit la racine du poids : les surfaces restent proportionnelles
+      document.querySelector('[data-page-square]').style.width =
+        `${Math.min(100, Math.sqrt(bytes / MEDIAN_BYTES) * 100)}%`;
       document.querySelector('[data-page-note]').hidden = false;
     };
 
@@ -640,6 +607,48 @@
     });
     meter.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') event.target.blur();
+    });
+
+    // Lightbox des réalisations : l'image déjà chargée, en grand, sans rien télécharger de plus
+    const lightbox = document.querySelector('[data-lightbox]');
+    const lightboxImg = document.querySelector('[data-lightbox-img]');
+    const lightboxCaption = document.querySelector('[data-lightbox-caption]');
+    const shots = [...document.querySelectorAll('.work__media img')];
+    let current = 0;
+
+    const show = (index) => {
+      current = (index + shots.length) % shots.length;
+      const shot = shots[current];
+      lightboxImg.src = shot.currentSrc || shot.src;
+      lightboxImg.alt = shot.alt;
+      lightboxCaption.textContent = `${shot.closest('.work__item').querySelector('h3').textContent} · ${current + 1}\u00a0/\u00a0${shots.length}`;
+    };
+
+    shots.forEach((shot, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'work__zoom';
+      button.setAttribute('aria-label', `Agrandir l'image\u00a0: ${shot.alt}`);
+      const picture = shot.closest('picture');
+      picture.before(button);
+      button.append(picture);
+      button.addEventListener('click', () => {
+        show(index);
+        lightbox.showModal();
+      });
+    });
+
+    lightbox.querySelectorAll('[data-lightbox-step]').forEach((button) => {
+      button.addEventListener('click', () => show(current + Number(button.dataset.lightboxStep)));
+    });
+    lightbox.querySelector('[data-lightbox-close]').addEventListener('click', () => lightbox.close());
+    // Un clic à côté de l'image referme
+    lightbox.addEventListener('click', (event) => {
+      if (event.target === lightbox) lightbox.close();
+    });
+    lightbox.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') show(current - 1);
+      if (event.key === 'ArrowRight') show(current + 1);
     });
   </script>
 </body>
