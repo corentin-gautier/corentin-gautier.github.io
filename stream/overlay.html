@@ -1,0 +1,707 @@
+<!doctype html>
+<!--
+The stream overlay in the portfolio's style: dark paper, lime marker, tight sans set with serif and mono words.
+Not part of the site: tools/build.mjs only copies the pages it lists. In OBS, add a "Browser" source, 1920×1080
+(or 2560×1440), uncheck "Local file" and type the file's URL with its settings:
+
+    file:///…/stream/overlay.html?scene=game&channel=mychannel&topic=Un%20thème%20WordPress
+
+One Browser source per scene. Check "Refresh browser when scene becomes active" on the full screens, so the
+countdown starts again when the scene is shown.
+
+Scenes (scene=…):
+    game    default. A 16:10 hole for the screen capture (1440×900 at x 32, y 32, the Mac's screen at 75 % of
+            1920×1200), a column on the right with the webcam (384×216 at x 1504, y 160), the chat and the clock,
+            and a strip under the hole with the topic and rotating infos.
+    chat    the same frame, with a big 16:9 hole for the webcam (1440×810 at x 32, y 32) and no small one.
+    start   full screen "the stream starts soon", with a countdown when `in` or `at` is given.
+    pause   full screen "be right back".
+    end     full screen "that's it for today".
+
+Settings:
+    channel   Twitch channel: shows its chat and plays alerts for subs, gifts, raids and bits (read anonymously,
+              nothing to log into; follows need an authenticated API and are not read)
+    topic     what is shown now ("Un thème WordPress")
+    next      the next stream, on the full screens ("Jeudi, 20 h")
+    in        start screen: countdown in minutes (10)
+    at        start screen: countdown to a time of day (20:30)
+    since     the time the stream started, for the uptime (20:30); the page's load time otherwise
+    title     the full screen's title: lines split by |, *marked*, _serif_, `mono`, {t} the countdown
+    info      the strip's rotating lines, split by | (default: the site and the profiles)
+    goal      a goal's label, with goal_now and goal_max ("Abonnés", 12, 50)
+    cam       0 hides the small webcam hole of the game scene
+    ratio     16:9 gives the game scene a 16:9 hole (1440×810) instead of 16:10
+    chat      0 hides the chat even with a channel
+    hide      chat users never shown, split by commas (default: the usual bots); commands starting with ! are hidden
+    theme     dark (default) or light
+    lang      fr (default) or en
+    demo      1 plays fake messages and alerts, to set the scenes up
+    preview   1 draws a fake capture in the holes, to look at the overlay in a browser
+-->
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Overlay — Corentin Gautier</title>
+	<style>
+		/* The colours of assets/css/style.css, dark by default: the stream is watched at night */
+		:root {
+			--paper: #0e0f0c;
+			--ink: #eeefe6;
+			--muted: #a4a798;
+			--line: #3a3d33;
+			--accent: #c8f031;
+			--on-accent: #111210;
+			--accent-text: #c8f031;
+			--sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+			--serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+			--mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+		}
+		:root[data-theme="light"] {
+			--paper: #f4f3ee;
+			--ink: #111210;
+			--muted: #5d6057;
+			--line: #c9c9be;
+			--accent-text: #3f6212;
+		}
+
+		*, *::before, *::after { box-sizing: border-box; }
+		/* OBS composites the page over the capture: only what is drawn hides it */
+		html, body { margin: 0; overflow: hidden; background: transparent; }
+		body { color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+		h1, h2, p, ul, ol { margin: 0; padding: 0; list-style: none; }
+		[hidden] { display: none !important; }
+
+		/* Every layout is drawn on a 1920 px wide stage, scaled to the source's width */
+		.stage { position: absolute; left: 0; top: 0; width: 1920px; transform-origin: 0 0; }
+
+		/* The headline's voices, as on the site: the serif draws, the mono codes, the marker highlights */
+		.voice-design { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: -0.03em; }
+		.voice-code { font-family: var(--mono); font-weight: 400; letter-spacing: -0.08em; }
+		/* As on the site: lime words in the dark, a highlighter stroke on light paper */
+		.marked { color: var(--accent); font-style: normal; font-weight: 300; }
+		:root[data-theme="light"] .marked { color: inherit; background: linear-gradient(transparent 60%, var(--accent) 60% 92%, transparent 92%); }
+		.label { font: 400 19px/1.3 var(--mono); color: var(--muted); letter-spacing: -0.01em; }
+		.dot { display: inline-block; width: 0.55em; height: 0.55em; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 1px var(--ink); flex: none; }
+		.dot--live { animation: pulse 2s ease-in-out infinite; }
+		@keyframes pulse { 50% { box-shadow: 0 0 0 1px var(--ink), 0 0 0 7px rgba(200, 240, 49, 0.25); } }
+		.tabular { font-variant-numeric: tabular-nums; }
+
+		/* The site's wordmark: the lime square and the name */
+		.wordmark { display: flex; align-items: center; gap: 16px; font-weight: 700; letter-spacing: -0.02em; }
+		.wordmark__mark { width: 48px; height: 48px; background: var(--accent); color: var(--on-accent); flex: none; }
+		.wordmark__mark svg { display: block; width: 100%; height: 100%; }
+
+		/* --- Game and chat: a frame around holes ------------------------------------------------- */
+		.backdrop { position: absolute; inset: 0; background: var(--paper); }
+		.main { position: absolute; left: 32px; top: 32px; bottom: 32px; width: 1440px; display: flex; flex-direction: column; gap: 24px; }
+		.hole { position: relative; flex: none; outline: 1px solid var(--line); }
+		/* Crop marks at the corners, as on a drawing */
+		.hole::after {
+			content: "";
+			position: absolute;
+			inset: -9px;
+			pointer-events: none;
+			--l: 22px;
+			--t: 3px;
+			background:
+				linear-gradient(var(--accent) 0 0) left top / var(--l) var(--t) no-repeat,
+				linear-gradient(var(--accent) 0 0) left top / var(--t) var(--l) no-repeat,
+				linear-gradient(var(--accent) 0 0) right top / var(--l) var(--t) no-repeat,
+				linear-gradient(var(--accent) 0 0) right top / var(--t) var(--l) no-repeat,
+				linear-gradient(var(--accent) 0 0) left bottom / var(--l) var(--t) no-repeat,
+				linear-gradient(var(--accent) 0 0) left bottom / var(--t) var(--l) no-repeat,
+				linear-gradient(var(--accent) 0 0) right bottom / var(--l) var(--t) no-repeat,
+				linear-gradient(var(--accent) 0 0) right bottom / var(--t) var(--l) no-repeat;
+		}
+		.main .hole { width: 1440px; aspect-ratio: 16 / 10; }
+		.main .hole[data-ratio="16:9"] { aspect-ratio: 16 / 9; }
+
+		/* Under the hole: the topic on the left, the rotating infos on the right */
+		.strip { flex: 1; display: flex; align-items: center; justify-content: space-between; gap: 48px; min-height: 0; border-top: 1px solid var(--line); padding-top: 4px; }
+		.topic { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+		.topic p:last-child { font-size: 44px; font-weight: 700; line-height: 1.05; letter-spacing: -0.045em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+		.main[data-scene="chat"] .topic p:last-child { font-size: 72px; }
+		.infos { position: relative; flex: none; width: 520px; height: 40px; }
+		.infos li { position: absolute; inset: 0; display: flex; align-items: center; justify-content: flex-end; gap: 14px; font: 400 24px/1 var(--mono); color: var(--ink); opacity: 0; transform: translateY(10px); transition: opacity 0.6s, transform 0.6s; white-space: nowrap; }
+		.infos li.is-on { opacity: 1; transform: none; }
+
+		.column { position: absolute; left: 1504px; top: 32px; bottom: 32px; width: 384px; display: flex; flex-direction: column; gap: 28px; }
+		.column .wordmark { font-size: 27px; }
+		.status { display: flex; align-items: center; justify-content: space-between; margin-top: -8px; padding: 14px 0; border-block: 1px solid var(--line); font-size: 21px; }
+		.status span { display: inline-flex; align-items: center; gap: 12px; }
+		.status time { font-family: var(--mono); color: var(--muted); }
+		.column .hole { width: 384px; height: 216px; }
+		.panel-title { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+		.panel-title h2 { font: italic 400 34px/1 var(--serif); letter-spacing: -0.02em; }
+		.chat-slot { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+		.goal { display: flex; flex-direction: column; gap: 10px; }
+		.goal__head { display: flex; justify-content: space-between; align-items: baseline; font-size: 21px; font-weight: 600; }
+		.goal__head span:last-child { font-family: var(--mono); font-weight: 400; color: var(--muted); }
+		.goal__bar { height: 10px; outline: 1px solid var(--line); }
+		.goal__bar div { height: 100%; width: 0; background: var(--accent); transition: width 1s; }
+		.foot { display: flex; align-items: baseline; justify-content: space-between; padding-top: 14px; border-top: 1px solid var(--line); }
+		.foot time { font-size: 56px; font-weight: 700; letter-spacing: -0.05em; line-height: 1; }
+		.links { display: grid; grid-template-columns: auto 1fr; gap: 12px 20px; padding-top: 12px; font: 400 21px/1.2 var(--mono); }
+		.links li { display: contents; }
+		.links li span:first-child { color: var(--muted); }
+
+		/* --- Chat ---------------------------------------------------------------------------------- */
+		.chat { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; -webkit-mask-image: linear-gradient(transparent, #000 18%); mask-image: linear-gradient(transparent, #000 18%); }
+		.msg { flex: none; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 22px; line-height: 1.32; overflow-wrap: anywhere; animation: enter 0.35s ease-out; }
+		.msg:last-child { border-bottom: 0; }
+		@keyframes enter { from { opacity: 0; transform: translateY(12px); } }
+		.msg__name { display: inline-flex; align-items: center; gap: 9px; margin-right: 10px; font-weight: 700; letter-spacing: -0.02em; }
+		.msg__name::before { content: ""; width: 10px; height: 10px; background: var(--user, var(--muted)); }
+		.msg--staff .msg__name { color: var(--accent-text); }
+		.msg__text { color: var(--ink); }
+		.msg--action .msg__text { font-family: var(--serif); font-style: italic; }
+		.msg__text img { height: 1.45em; vertical-align: -0.38em; margin: 0 1px; }
+		.msg__text .marked { font-weight: 600; }
+
+		/* --- Full screens: starting, pause, end ---------------------------------------------------- */
+		.screen { position: absolute; inset: 0; background: var(--paper); padding: 0 80px 64px; display: flex; flex-direction: column; }
+		/* The site's twelve columns, barely there, like the guides of a drawing */
+		.screen::before {
+			content: "";
+			position: absolute;
+			inset: 0 80px;
+			opacity: 0.35;
+			background: repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px calc((100% - 1px) / 12));
+			-webkit-mask-image: linear-gradient(transparent 6%, #000 30%, #000 70%, transparent);
+			mask-image: linear-gradient(transparent 6%, #000 30%, #000 70%, transparent);
+			pointer-events: none;
+		}
+		.screen > * { position: relative; }
+		.screen__head { display: flex; align-items: center; justify-content: space-between; height: 112px; border-bottom: 1px solid var(--line); font-size: 24px; }
+		.screen__head .wordmark { font-size: 30px; }
+		.screen__head .meta { display: flex; align-items: center; gap: 40px; }
+		.screen__head .meta > span { display: inline-flex; align-items: center; gap: 12px; }
+		/* The countdown's progress, along the header's rule */
+		.progress { position: absolute; left: 80px; right: 80px; top: 111px; height: 3px; }
+		.progress div { height: 100%; width: 0; background: var(--accent); }
+		.progress--wait div { width: 18%; animation: wait 3.2s ease-in-out infinite alternate; }
+		@keyframes wait { from { transform: translateX(0); } to { transform: translateX(455%); } }
+		.screen__body { flex: 1; min-height: 0; display: flex; gap: 80px; padding-top: 72px; }
+		.screen__main { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; }
+		.headline { font-size: var(--size, 200px); font-weight: 700; line-height: 0.92; letter-spacing: -0.055em; }
+		.headline > span { display: block; padding-left: calc(var(--i) * 1%); white-space: nowrap; }
+		.facts { display: flex; gap: 64px; align-items: flex-end; justify-content: space-between; }
+		.facts dl { margin: 0; display: grid; grid-template-columns: auto auto; gap: 10px 32px; font-size: 26px; line-height: 1.3; }
+		.facts dt { color: var(--muted); }
+		.facts dd { margin: 0; font-weight: 600; }
+		.facts .links { padding: 0; font-size: 22px; gap: 10px; }
+		.screen__chat { width: 520px; flex: none; display: flex; flex-direction: column; gap: 12px; }
+
+		/* --- Alerts -------------------------------------------------------------------------------- */
+		.alerts { position: absolute; z-index: 5; left: 0; right: 0; display: flex; justify-content: center; pointer-events: none; }
+		.alerts[data-at="game"] { top: 80px; width: 1504px; }
+		.alerts[data-at="screen"] { top: 168px; }
+		.alert {
+			display: flex;
+			flex-direction: column;
+			gap: 6px;
+			min-width: 640px;
+			max-width: 1200px;
+			padding: 26px 44px 30px;
+			background: var(--accent);
+			color: var(--on-accent);
+			box-shadow: 14px 14px 0 var(--paper), 14px 14px 0 1px var(--line);
+			clip-path: inset(0 100% 0 0);
+			animation: reveal 0.6s cubic-bezier(0.7, 0, 0.2, 1) forwards;
+		}
+		.alert.is-leaving { animation: hide 0.5s cubic-bezier(0.7, 0, 0.2, 1) forwards; }
+		@keyframes reveal { to { clip-path: inset(0 -20px -20px 0); } }
+		@keyframes hide { from { clip-path: inset(0 -20px -20px 0); } to { clip-path: inset(0 0 0 100%); } }
+		.alert__label { font: 400 22px/1 var(--mono); letter-spacing: -0.01em; }
+		.alert__name { font-size: 76px; font-weight: 700; line-height: 1; letter-spacing: -0.055em; }
+		.alert__detail { font: italic 400 34px/1.15 var(--serif); letter-spacing: -0.02em; }
+		.alert__message { margin-top: 6px; font-size: 24px; line-height: 1.3; max-width: 1000px; }
+
+		/* --- Preview: a fake capture under the holes ----------------------------------------------- */
+		body.preview { background:
+			radial-gradient(circle at 30% 40%, #2b6a8f, transparent 50%),
+			radial-gradient(circle at 70% 70%, #8f3b5a, transparent 50%),
+			repeating-conic-gradient(#1b1d24 0 25%, #23262f 0 50%) 0 0 / 64px 64px; }
+	</style>
+</head>
+<body>
+	<div class="stage" id="stage">
+
+		<!-- Game and chat: holes for the capture and the webcam -->
+		<div id="live" hidden>
+			<div class="backdrop" id="backdrop"></div>
+			<div class="main" id="main">
+				<div class="hole" data-hole id="main-hole"></div>
+				<div class="strip">
+					<div class="topic" data-topic>
+						<p class="label" data-text="now"></p>
+						<p data-text="topic"></p>
+					</div>
+					<ul class="infos" data-infos></ul>
+				</div>
+			</div>
+			<div class="column">
+				<div class="wordmark" data-wordmark></div>
+				<p class="status">
+					<span><i class="dot dot--live"></i><b data-text="live"></b></span>
+					<time class="tabular" data-uptime></time>
+				</p>
+				<div class="hole" data-hole data-cam></div>
+				<div class="chat-slot" data-chat-slot="game">
+					<div class="panel-title"><h2 data-text="chat"></h2><span class="label" data-text="channel"></span></div>
+				</div>
+				<div class="chat-slot" data-links-slot>
+					<div class="panel-title"><h2 data-text="find"></h2></div>
+					<ul class="links" data-links></ul>
+				</div>
+				<div class="goal" data-goal>
+					<p class="goal__head"><span data-text="goal"></span><span class="tabular" data-goal-count></span></p>
+					<div class="goal__bar"><div data-goal-bar></div></div>
+				</div>
+				<p class="foot"><span class="label">Bordeaux</span><time class="tabular" data-clock></time></p>
+			</div>
+		</div>
+
+		<!-- Starting, pause, end -->
+		<div class="screen" id="screen" hidden>
+			<header class="screen__head">
+				<div class="wordmark" data-wordmark></div>
+				<div class="meta">
+					<span><i class="dot" id="screen-dot"></i><span data-text="state"></span></span>
+					<time class="tabular" data-clock></time>
+				</div>
+			</header>
+			<div class="progress" id="progress"><div></div></div>
+			<div class="screen__body">
+				<div class="screen__main">
+					<h1 class="headline" id="headline"></h1>
+					<div class="facts">
+						<dl id="facts"></dl>
+						<ul class="links" data-links></ul>
+					</div>
+				</div>
+				<div class="screen__chat" data-chat-slot="screen">
+					<div class="panel-title"><h2 data-text="chat"></h2><span class="label" data-text="channel"></span></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="alerts" id="alerts"></div>
+	</div>
+
+	<script>
+		const params = new URLSearchParams(location.search);
+		const lang = params.get("lang") === "en" ? "en" : "fr";
+		const scene = ["game", "chat", "start", "pause", "end"].includes(params.get("scene")) ? params.get("scene") : "game";
+		const full = ["start", "pause", "end"].includes(scene);
+		const channel = (params.get("channel") || "").trim().toLowerCase().replace(/^#/, "");
+		const demo = params.get("demo") === "1";
+		const withChat = (channel || demo) && params.get("chat") !== "0";
+
+		document.documentElement.lang = lang;
+		if (params.get("theme") === "light") document.documentElement.dataset.theme = "light";
+		if (params.get("preview") === "1") document.body.classList.add("preview");
+
+		const words = {
+			fr: {
+				now: "En ce moment", live: "En direct", soon: "Bientôt en direct", away: "En pause", over: "Terminé",
+				chat: "Le chat", find: "Me retrouver", program: "Au programme", next: "Prochain live",
+				months: n => `${n} mois d'affilée`, tier: { Prime: "avec Prime", 1000: "niveau 1", 2000: "niveau 2", 3000: "niveau 3" },
+				sub: "Nouvel abonnement", resub: "Réabonnement", gift: "Abonnement offert", gifts: n => `${n} abonnements offerts`,
+				to: name => `à ${name}`, community: "à la communauté", raid: "Raid", raiders: n => `avec ${n} personne${n > 1 ? "s" : ""}`,
+				bits: n => `${n} bits`, follow: "Nouveau follow", welcome: "Bienvenue !", soonText: "dans quelques secondes",
+				titles: {
+					start: ["Le live", "_commence_", "dans *{t}*."],
+					startNoTime: ["Le live", "_va bientôt_", "*commencer*."],
+					pause: ["Petite pause,", "_je reviens_", "*tout de suite*."],
+					end: ["C'est fini", "_pour_ aujourd'hui,", "*à bientôt*."],
+				},
+			},
+			en: {
+				now: "Now", live: "Live", soon: "Live soon", away: "On a break", over: "Over",
+				chat: "Chat", find: "Find me", program: "Today", next: "Next stream",
+				months: n => `${n} months in a row`, tier: { Prime: "with Prime", 1000: "tier 1", 2000: "tier 2", 3000: "tier 3" },
+				sub: "New subscriber", resub: "Resubscribed", gift: "Gifted sub", gifts: n => `${n} gifted subs`,
+				to: name => `to ${name}`, community: "to the community", raid: "Raid", raiders: n => `with ${n} viewer${n > 1 ? "s" : ""}`,
+				bits: n => `${n} bits`, follow: "New follower", welcome: "Welcome!", soonText: "a few seconds",
+				titles: {
+					start: ["The stream", "_starts_", "in *{t}*."],
+					startNoTime: ["The stream", "_starts_", "*soon*."],
+					pause: ["Short break,", "_back_", "*in a minute*."],
+					end: ["That's it", "_for_ today,", "*see you soon*."],
+				},
+			},
+		}[lang];
+
+		const $ = (selector, root = document) => root.querySelector(selector);
+		const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+		const el = (tag, className, text) => {
+			const node = document.createElement(tag);
+			if (className) node.className = className;
+			if (text != null) node.textContent = text;
+			return node;
+		};
+		const pad = n => String(n).padStart(2, "0");
+
+		// --- Texts ----------------------------------------------------------------------------------
+		const topic = params.get("topic") || "";
+		const goal = params.get("goal") || "";
+		const texts = {
+			...words,
+			topic,
+			goal,
+			channel: channel ? `twitch.tv/${channel}` : "",
+			state: { start: words.soon, pause: words.away, end: words.over }[scene],
+		};
+		for (const node of $$("[data-text]")) node.textContent = texts[node.dataset.text];
+		for (const node of $$("[data-topic]")) node.hidden = !topic;
+
+		const mark = `<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M16 48V36a20 20 0 0 1 20-20h12v12a20 20 0 0 1-20 20zl18-18" fill="none" stroke="currentColor" stroke-width="5"/><circle cx="35" cy="29" r="5" fill="currentColor"/></svg>`;
+		for (const node of $$("[data-wordmark]")) node.innerHTML = `<span class="wordmark__mark">${mark}</span><span>Corentin Gautier</span>`;
+
+		// The profiles, in the column when there is no chat and at the bottom of the full screens
+		const links = [
+			["Site", "corentingautier.dev"],
+			["GitHub", "corentin-gautier"],
+			["Dribbble", "Median"],
+			...(channel ? [["Twitch", channel]] : []),
+		];
+		for (const list of $$("[data-links]")) {
+			for (const [name, value] of links) {
+				const li = el("li");
+				li.append(el("span", "", name), el("span", "", value));
+				list.append(li);
+			}
+		}
+
+		// The strip's rotating lines
+		const infos = params.has("info") ? params.get("info").split("|").filter(Boolean) : ["corentingautier.dev", "github.com/corentin-gautier", ...(channel ? [`twitch.tv/${channel}`] : [])];
+		const infoList = $("[data-infos]");
+		for (const line of infos) {
+			const li = el("li");
+			li.append(el("i", "dot"), el("span", "", line));
+			infoList.append(li);
+		}
+		let infoIndex = 0;
+		function rotateInfo() {
+			const items = infoList.children;
+			if (!items.length) return;
+			for (const item of items) item.classList.remove("is-on");
+			items[infoIndex % items.length].classList.add("is-on");
+			infoIndex++;
+		}
+
+		// The goal: a label, a count and a bar
+		const goalNow = Number(params.get("goal_now")) || 0;
+		const goalMax = Number(params.get("goal_max")) || 0;
+		$("[data-goal]").hidden = !goal || !goalMax;
+		$("[data-goal-count]").textContent = `${goalNow} / ${goalMax}`;
+		setTimeout(() => { $("[data-goal-bar]").style.width = `${Math.min(100, (goalNow / goalMax) * 100)}%`; }, 300);
+
+		// --- Layout ---------------------------------------------------------------------------------
+		const stage = $("#stage");
+		const main = $("#main");
+		main.dataset.scene = scene;
+		$("#main-hole").dataset.ratio = scene === "chat" || params.get("ratio") === "16:9" ? "16:9" : "16:10";
+		for (const node of $$("[data-cam]")) node.hidden = scene === "chat" || params.get("cam") === "0";
+		$('[data-chat-slot="game"]').hidden = !withChat;
+		$("[data-links-slot]").hidden = withChat;
+		$('[data-chat-slot="screen"]').hidden = !withChat;
+		$("#alerts").dataset.at = full ? "screen" : "game";
+
+		// One chat list, moved into the slot of the scene shown
+		const chat = el("ol", "chat");
+		$(`[data-chat-slot="${full ? "screen" : "game"}"]`).append(chat);
+
+		function layout() {
+			const scale = innerWidth / 1920;
+			stage.style.height = `${innerHeight / scale}px`;
+			stage.style.transform = `scale(${scale})`;
+			$("#live").hidden = full;
+			$("#screen").hidden = !full;
+			if (!full) cutHoles(scale);
+		}
+
+		// The backdrop covers the stage except where the capture and the webcam show through
+		function cutHoles(scale) {
+			const box = stage.getBoundingClientRect();
+			const points = ["0 0", "100% 0", "100% 100%", "0 100%", "0 0"];
+			for (const hole of $$("#live [data-hole]")) {
+				if (hole.hidden) continue;
+				const r = hole.getBoundingClientRect();
+				const [x1, y1, x2, y2] = [r.left - box.left, r.top - box.top, r.right - box.left, r.bottom - box.top].map(v => `${v / scale}px`);
+				// Back to the corner after each hole, or the jumps between holes cut slivers of their own
+				points.push(`${x1} ${y1}`, `${x1} ${y2}`, `${x2} ${y2}`, `${x2} ${y1}`, `${x1} ${y1}`, "0 0");
+			}
+			$("#backdrop").style.clipPath = `polygon(evenodd, ${points.join(", ")})`;
+		}
+
+		// --- Full screens: the headline, the facts and the countdown --------------------------------
+		let deadline = null;
+		if (scene === "start") {
+			if (params.get("in")) deadline = Date.now() + Number(params.get("in")) * 60000;
+			const at = (params.get("at") || "").match(/^(\d{1,2})[:h](\d{2})$/);
+			if (at) {
+				const day = new Date();
+				day.setHours(Number(at[1]), Number(at[2]), 0, 0);
+				deadline = day.getTime();
+			}
+		}
+		const countdownFrom = Date.now();
+
+		// Escaped first, then *marked*, _serif_, `mono` and {t}: what the URL brings never becomes markup
+		function richText(text) {
+			return text
+				.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
+				.replace(/\*(.+?)\*/g, '<em class="marked">$1</em>')
+				.replace(/_(.+?)_/g, '<span class="voice-design">$1</span>')
+				.replace(/`(.+?)`/g, '<span class="voice-code">$1</span>')
+				.replace(/\{t\}/g, '<span class="tabular" data-countdown></span>');
+		}
+
+		if (full) {
+			const lines = params.has("title")
+				? params.get("title").split("|")
+				: words.titles[scene === "start" && !deadline ? "startNoTime" : scene];
+			const headline = $("#headline");
+			const offsets = [0, 14, 32, 50, 24];
+			lines.forEach((line, index) => {
+				const span = el("span");
+				span.style.setProperty("--i", offsets[index % offsets.length]);
+				span.innerHTML = richText(line);
+				headline.append(span);
+			});
+			// Narrower with the chat beside it; three lines fit at this size either way
+			headline.style.setProperty("--size", withChat ? "150px" : "200px");
+
+			const facts = $("#facts");
+			const fact = (term, value) => { if (value) facts.append(el("dt", "", term), el("dd", "", value)); };
+			fact(words.program, topic);
+			fact(words.next, params.get("next"));
+
+			$("#screen-dot").classList.toggle("dot--live", scene !== "end");
+			$("#progress").classList.toggle("progress--wait", scene === "start" ? !deadline : scene === "pause");
+			$("#progress").hidden = scene === "end";
+		}
+
+		// --- Clocks ---------------------------------------------------------------------------------
+		let since = Date.now();
+		const sinceParam = (params.get("since") || "").match(/^(\d{1,2})[:h](\d{2})$/);
+		if (sinceParam) {
+			const start = new Date();
+			start.setHours(Number(sinceParam[1]), Number(sinceParam[2]), 0, 0);
+			if (start.getTime() > Date.now()) start.setDate(start.getDate() - 1);
+			since = start.getTime();
+		}
+
+		function tick() {
+			const now = new Date();
+			for (const node of $$("[data-clock]")) node.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+			const up = Math.floor((Date.now() - since) / 1000);
+			for (const node of $$("[data-uptime]")) node.textContent = `${Math.floor(up / 3600)}:${pad(Math.floor(up / 60) % 60)}:${pad(up % 60)}`;
+			if (deadline) {
+				const left = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+				const text = left ? `${pad(Math.floor(left / 60))}:${pad(left % 60)}` : words.soonText;
+				for (const node of $$("[data-countdown]")) node.textContent = text;
+				const total = Math.max(1, deadline - countdownFrom);
+				$("#progress div").style.width = `${Math.min(100, ((Date.now() - countdownFrom) / total) * 100)}%`;
+			}
+		}
+
+		// --- Chat -----------------------------------------------------------------------------------
+		const hidden = new Set((params.get("hide") ?? "nightbot,streamelements,streamlabs,moobot,fossabot,wizebot,sery_bot").toLowerCase().split(",").map(s => s.trim()).filter(Boolean));
+		const MAX_MESSAGES = 40;
+
+		// Twitch gives the emotes as code point ranges: "25:0-4,12-16/1902:6-10"
+		function messageBody(text, emotes) {
+			const body = el("span", "msg__text");
+			const chars = Array.from(text);
+			const ranges = [];
+			for (const part of (emotes || "").split("/").filter(Boolean)) {
+				const [id, spans] = part.split(":");
+				for (const span of spans.split(",")) {
+					const [from, to] = span.split("-").map(Number);
+					ranges.push({ id, from, to });
+				}
+			}
+			ranges.sort((a, b) => a.from - b.from);
+			let cursor = 0;
+			for (const { id, from, to } of ranges) {
+				if (from > cursor) body.append(chars.slice(cursor, from).join(""));
+				const img = el("img");
+				img.src = `https://static-cdn.jtvnw.net/emoticons/v2/${id}/default/dark/2.0`;
+				img.alt = chars.slice(from, to + 1).join("");
+				body.append(img);
+				cursor = to + 1;
+			}
+			if (cursor < chars.length) body.append(chars.slice(cursor).join(""));
+			return body;
+		}
+
+		function addMessage({ id, userId, name, color, text, emotes, staff, action }) {
+			const li = el("li", "msg");
+			if (staff) li.classList.add("msg--staff");
+			if (action) li.classList.add("msg--action");
+			if (id) li.dataset.id = id;
+			if (userId) li.dataset.user = userId;
+			const who = el("span", "msg__name", name);
+			if (color) who.style.setProperty("--user", color);
+			li.append(who, messageBody(text, emotes));
+			chat.append(li);
+			while (chat.children.length > MAX_MESSAGES) chat.firstElementChild.remove();
+		}
+
+		// --- Alerts: one at a time, each for a few seconds ------------------------------------------
+		const queue = [];
+		let showing = false;
+
+		function alertFor({ label, name, detail, message }) {
+			queue.push({ label, name, detail, message });
+			if (!showing) nextAlert();
+		}
+
+		function nextAlert() {
+			const item = queue.shift();
+			if (!item) { showing = false; return; }
+			showing = true;
+			const box = el("div", "alert");
+			box.append(el("p", "alert__label", item.label), el("p", "alert__name", item.name));
+			if (item.detail) box.append(el("p", "alert__detail", item.detail));
+			if (item.message) {
+				const message = messageBody(item.message.text, item.message.emotes);
+				message.className = "alert__message";
+				box.append(message);
+			}
+			$("#alerts").append(box);
+			setTimeout(() => box.classList.add("is-leaving"), 6500);
+			setTimeout(() => { box.remove(); setTimeout(nextAlert, 400); }, 7000);
+		}
+
+		// --- Twitch, read anonymously over IRC ------------------------------------------------------
+		function parseLine(line) {
+			const out = { tags: {}, prefix: "", command: "", params: [], trailing: null };
+			let rest = line;
+			if (rest.startsWith("@")) {
+				const end = rest.indexOf(" ");
+				for (const pair of rest.slice(1, end).split(";")) {
+					const eq = pair.indexOf("=");
+					out.tags[pair.slice(0, eq)] = pair.slice(eq + 1).replace(/\\(.)/g, (_, c) => ({ s: " ", ":": ";", "\\": "\\", r: "\r", n: "\n" })[c] ?? c);
+				}
+				rest = rest.slice(end + 1);
+			}
+			if (rest.startsWith(":")) {
+				const end = rest.indexOf(" ");
+				out.prefix = rest.slice(1, end);
+				rest = rest.slice(end + 1);
+			}
+			const colon = rest.indexOf(" :");
+			if (colon >= 0) {
+				out.trailing = rest.slice(colon + 2);
+				rest = rest.slice(0, colon);
+			}
+			[out.command, ...out.params] = rest.split(" ");
+			return out;
+		}
+
+		// A community gift is followed by one notice per gifted sub: those are folded into the first alert
+		const pendingGifts = new Map();
+
+		function onIrc({ tags, prefix, command, trailing }, socket) {
+			if (command === "PING") return socket.send(`PONG :${trailing}`);
+			const login = (tags.login || prefix.split("!")[0] || "").toLowerCase();
+			const name = tags["display-name"] || login;
+
+			if (command === "PRIVMSG" && trailing != null) {
+				let text = trailing;
+				const action = text.startsWith("\u0001ACTION ") && text.endsWith("\u0001");
+				if (action) text = text.slice(8, -1);
+				if (Number(tags.bits) > 0) alertFor({ label: words.bits(Number(tags.bits)), name, message: { text, emotes: tags.emotes } });
+				if (hidden.has(login) || text.startsWith("!")) return;
+				const badges = tags.badges || "";
+				addMessage({
+					id: tags.id, userId: tags["user-id"], name, color: tags.color, text, emotes: tags.emotes, action,
+					staff: /(^|,)(broadcaster|moderator|vip)\//.test(badges),
+				});
+			}
+
+			if (command === "USERNOTICE") {
+				const kind = tags["msg-id"];
+				const months = Number(tags["msg-param-cumulative-months"]) || 0;
+				const tier = words.tier[tags["msg-param-sub-plan"]] || "";
+				const message = trailing ? { text: trailing, emotes: tags.emotes } : null;
+				if (kind === "sub") alertFor({ label: words.sub, name, detail: tier, message });
+				if (kind === "resub") alertFor({ label: words.resub, name, detail: months ? words.months(months) : tier, message });
+				if (kind === "submysterygift") {
+					const count = Number(tags["msg-param-mass-gift-count"]) || 1;
+					pendingGifts.set(login, (pendingGifts.get(login) || 0) + count);
+					alertFor({ label: words.gifts(count), name, detail: words.community });
+				}
+				if (kind === "subgift") {
+					const pending = pendingGifts.get(login) || 0;
+					if (pending > 0) pendingGifts.set(login, pending - 1);
+					else alertFor({ label: words.gift, name, detail: words.to(tags["msg-param-recipient-display-name"]) });
+				}
+				if (kind === "raid") alertFor({ label: words.raid, name: tags["msg-param-displayName"] || name, detail: words.raiders(Number(tags["msg-param-viewerCount"]) || 0) });
+			}
+
+			// Moderation: a deleted message, or every message of a timed out or banned user, leaves the screen too
+			if (command === "CLEARMSG") $(`.msg[data-id="${CSS.escape(tags["target-msg-id"] || "")}"]`)?.remove();
+			if (command === "CLEARCHAT") {
+				if (tags["target-user-id"]) for (const node of $$(`.msg[data-user="${CSS.escape(tags["target-user-id"])}"]`)) node.remove();
+				else chat.replaceChildren();
+			}
+		}
+
+		function connect() {
+			const socket = new WebSocket("wss://irc-ws.chat.twitch.tv:443");
+			socket.onopen = () => {
+				socket.send("CAP REQ :twitch.tv/tags twitch.tv/commands");
+				socket.send("PASS SCHMOOPIIE");
+				socket.send(`NICK justinfan${Math.floor(10000 + Math.random() * 80000)}`);
+				socket.send(`JOIN #${channel}`);
+			};
+			socket.onmessage = event => {
+				for (const line of event.data.split("\r\n")) if (line) onIrc(parseLine(line), socket);
+			};
+			socket.onclose = () => setTimeout(connect, 5000);
+		}
+
+		// --- Demo: fake messages and alerts, to set the scenes up -----------------------------------
+		function runDemo() {
+			const people = [["Margaux", "#ff7a59"], ["pixel_louis", "#59a5ff"], ["Sam", "#b980ff"], ["ArthurDev", "#3dd68c"], ["nina.codes", "#ffcc4d"]];
+			const lines = lang === "fr"
+				? ["Salut tout le monde !", "C'est quoi ton thème VS Code ?", "Le site pèse vraiment moins de 300 ko ?", "Trop propre ce layout", "gg", "Tu fais ça en vanilla ou avec un framework ?", "Le grid à 12 colonnes <3", "Bonsoir depuis Lyon"]
+				: ["Hey everyone!", "What's your VS Code theme?", "Is the site really under 300 kB?", "That layout is so clean", "gg", "Vanilla or a framework?", "The 12-column grid <3", "Good evening from Lyon"];
+			let n = 0;
+			const say = () => {
+				const [name, color] = people[n % people.length];
+				addMessage({ name, color, text: lines[n % lines.length], staff: n % 7 === 3 });
+				n++;
+			};
+			for (let i = 0; i < 6; i++) say();
+			setInterval(say, 2600);
+			const alerts = [
+				{ label: words.follow, name: "pixel_louis", detail: words.welcome },
+				{ label: words.resub, name: "Margaux", detail: words.months(14), message: { text: lang === "fr" ? "Toujours là pour les lives du jeudi !" : "Always here for Thursday streams!" } },
+				{ label: words.raid, name: "nina.codes", detail: words.raiders(42) },
+				{ label: words.gifts(5), name: "ArthurDev", detail: words.community },
+			];
+			let a = 0;
+			const fire = () => alertFor(alerts[a++ % alerts.length]);
+			setTimeout(fire, 1200);
+			setInterval(fire, 16000);
+		}
+
+		addEventListener("resize", layout);
+		document.fonts.ready.then(layout);
+		layout();
+		tick();
+		rotateInfo();
+		setInterval(tick, 1000);
+		setInterval(rotateInfo, 7000);
+		if (withChat && channel) connect();
+		if (demo) runDemo();
+	</script>
+</body>
+</html>
