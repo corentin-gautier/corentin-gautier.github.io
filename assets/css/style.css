@@ -1055,94 +1055,6 @@ html:has(.lightbox[open]) {
   }
 }
 
-/* Pricing: the starting prices at poster size, three to a row */
-
-.pricing {
-  padding-bottom: var(--section);
-}
-
-.pricing__intro {
-  margin-top: 1.5rem;
-  color: var(--muted);
-}
-
-.pricing__list {
-  display: grid;
-  gap: 0 var(--gap);
-  margin-top: clamp(3rem, 6vw, 5rem);
-}
-
-.pricing__list li {
-  padding-block: 1.25rem 2.5rem;
-  border-top: 1px solid var(--ink);
-}
-
-.pricing__price {
-  font-size: clamp(3rem, 6.5vw, 6.5rem);
-  font-weight: 300;
-  line-height: 0.95;
-  letter-spacing: -0.055em;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-.pricing__from {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: var(--muted);
-  font-size: 0.95rem;
-  font-weight: 400;
-  letter-spacing: 0;
-}
-
-.pricing__unit {
-  font-size: 0.35em;
-  letter-spacing: -0.01em;
-}
-
-.pricing__list h3 {
-  margin-top: 1.25rem;
-  font-size: 1.25rem;
-  letter-spacing: -0.015em;
-}
-
-.pricing__list h3 + p {
-  margin-top: 0.4rem;
-  color: var(--muted);
-  font-size: 0.98rem;
-}
-
-.pricing__note {
-  margin-top: 1rem;
-  color: var(--muted);
-  font-size: 0.85rem;
-}
-
-@media (min-width: 40rem) {
-  .pricing__list {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (min-width: 62rem) {
-  .pricing .section-title {
-    grid-column: 1 / 5;
-  }
-
-  .pricing__intro {
-    grid-column: 7 / 12;
-    margin-top: 0.4rem;
-  }
-
-  .pricing__list {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .pricing__note {
-    grid-column: 1 / 7;
-  }
-}
-
 /* Career: the years at poster size in the margin */
 
 .career {
@@ -1349,38 +1261,11 @@ html:has(.lightbox[open]) {
   }
 }
 
-/* Small phones: one picture per project, prices on one line with their name */
+/* Small phones: one picture per project */
 @media (max-width: 39.99rem) {
   .work__item--duo .work__media picture:nth-child(n + 2),
   .work__item--duo .work__media .work__zoom:nth-child(n + 2) {
     display: none;
-  }
-
-  .pricing__list li {
-    display: flex;
-    flex-direction: column;
-    padding-block: 1.5rem;
-  }
-
-  .pricing__list h3 {
-    order: -1;
-    margin-top: 0;
-    font-size: 1.15rem;
-  }
-
-  .pricing__price {
-    margin-top: 0.35rem;
-    font-size: 2.1rem;
-  }
-
-  .pricing__from {
-    display: inline;
-    margin-right: 0.45rem;
-    font-size: 0.85rem;
-  }
-
-  .pricing__list h3 + p {
-    margin-top: 0.5rem;
   }
 }
 
