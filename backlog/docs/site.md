@@ -26,7 +26,7 @@ Freelance web designer and front-end developer in Bordeaux, since 2012. Audience
 | `#services` | Custom WordPress sites, web design and identity, front-end reinforcement, eco-design audits |
 | `#eco-conception` | Why a light site, four principles, this page's measured weight |
 | `#design` | Selected work: EasyNode, Nouvelles Renaissances, Jack In The Box, ADEME management UI |
-| `#code` | Own tools: the Forge, Snap Carousel, Core Blocks Enhancer; side projects: Cassonade, Restyle for Twitch, macOS Start Menu |
+| `#code` | Own tools: the Forge, Snap Carousel, Core Blocks Enhancer, No Thanks; side projects: Cassonade, Restyle for Twitch, macOS Start Menu |
 | `#methode` | Four steps: talk, proposal, mockups then development, launch and follow-up |
 | `#parcours` | Career since 2012 |
 | `#contact` | Contact band |

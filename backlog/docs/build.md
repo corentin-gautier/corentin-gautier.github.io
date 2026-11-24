@@ -32,4 +32,4 @@ type: guide
 
 ## Sitemaps
 
-- `sitemap.xml` is an index: `sitemap-main.xml` (this site) plus the sitemaps of the project sites served under the same domain (`/snap-carousel/`, `/core-blocks-enhancer/`, `/restyle-for-twitch/`, `/macos-start-menu/`), which live in their own repositories.
+- `sitemap.xml` is an index: `sitemap-main.xml` (this site) plus the sitemaps of the project sites served under the same domain (`/snap-carousel/`, `/core-blocks-enhancer/`, `/no-thanks/`, `/restyle-for-twitch/`, `/macos-start-menu/`), which live in their own repositories.
