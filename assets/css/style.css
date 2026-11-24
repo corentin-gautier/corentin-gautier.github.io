@@ -952,6 +952,27 @@ html:has(.lightbox[open]) {
   color: var(--ink);
 }
 
+.aside-projects__list {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.aside-projects__list > li > a:first-child {
+  font-weight: 600;
+}
+
+.aside-projects__links {
+  white-space: nowrap;
+  font-size: 0.85rem;
+}
+
+.aside-projects__links a {
+  color: var(--muted);
+}
+
 @media (min-width: 62rem) {
   .tools .section-title {
     grid-column: 1 / 5;
